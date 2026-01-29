@@ -245,7 +245,7 @@ export default function StudentDashboardClient() {
                         </Link>
                     </Button>
                     <Button variant="ghost" className="justify-start h-auto py-3" asChild>
-                        <Link href="/soporte">
+                        <Link href="/student/soporte">
                             <span className="flex-1 text-left">🎫 Soporte Técnico</span>
                             <ArrowRight className="h-4 w-4 text-muted-foreground" />
                         </Link>
