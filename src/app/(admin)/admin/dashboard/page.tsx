@@ -1,79 +1,80 @@
-import { createClient } from '@/lib/supabase/server'
-import { ApproveButton } from './approve-button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { createClient } from '@/lib/supabase/server';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Users, DollarSign, BookOpen, AlertCircle } from 'lucide-react';
 
-export default async function AdminDashboard() {
-  const supabase = await createClient()
+export default async function AdminDashboardPage() {
+  const supabase = await createClient();
 
-  // DEBUG: Check what user we are
-  const { data: { user } } = await supabase.auth.getUser()
-  console.log('Admin Dashboard User:', user?.id)
+  // Fetch Metrics
+  const { count: totalUsers } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+  const { count: activeStudents } = await supabase.from('enrollments').select('*', { count: 'exact', head: true }).eq('payment_status', 'paid');
+  const { count: pendingPayments } = await supabase.from('enrollments').select('*', { count: 'exact', head: true }).eq('payment_status', 'pending');
 
-  // Fetch pending verifications
-  const { data: enrollments, error } = await supabase
-    .from('enrollments')
-    .select(`
-      id,
-      created_at,
-      payment_method,
-      payment_proof_submitted_at,
-      profiles:user_id (
-        full_name
-      )
-    `)
-    .eq('payment_proof_status', 'submitted')
-    .order('payment_proof_submitted_at', { ascending: false })
-
-  if (error) {
-    console.error('Error fetching enrollments:', error)
-    return <div>Error loading data: {error.message}</div>
-  }
-
-  console.log('Enrollments found:', enrollments?.length)
+  // Calculate estimated revenue (naive: active * 800)
+  const estimatedRevenue = (activeStudents || 0) * 800;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <h1 className="text-3xl font-bold">Verificación de Pagos</h1>
-      
-      {(!enrollments || enrollments.length === 0) ? (
-        <Card className="bg-muted/10 border-white/10">
-            <CardContent className="pt-6 text-center text-muted-foreground">
-                No hay pagos pendientes de verificación.
-                <br/>
-                <span className="text-xs">Si acabas de pagar, recarga la página.</span>
-            </CardContent>
+    <div className="space-y-8 animate-in fade-in">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Panel de Control</h1>
+        <p className="text-muted-foreground">Resumen general de la academia.</p>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Estudiantes Activos</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{activeStudents}</div>
+            <p className="text-xs text-muted-foreground">
+              +{(totalUsers || 0) - (activeStudents || 0)} registrados sin pagar
+            </p>
+          </CardContent>
         </Card>
-      ) : (
-        <div className="grid gap-4">
-            {enrollments.map((enrollment: any) => (
-                <Card key={enrollment.id} className="bg-card border-white/10">
-                    <CardHeader className="flex flex-row items-center justify-between">
-                        <div>
-                            <CardTitle>
-                              {enrollment.profiles ? 
-                                `${enrollment.profiles.full_name || ''}`.trim() || 'Sin Nombre'
-                                : 'Usuario desconocido'}
-                            </CardTitle>
-                            <div className="text-sm text-muted-foreground">
-                              {enrollment.profiles?.email || 'No email'}
-                            </div>
-                        </div>
-                        <Badge variant="outline" className="bg-yellow-500/10 text-yellow-500 border-yellow-500/20">
-                            Pendiente
-                        </Badge>
-                    </CardHeader>
-                    <CardContent className="flex justify-between items-center">
-                        <div className="text-sm space-y-1">
-                            <p>Método: <span className="font-medium capitalize">{enrollment.payment_method?.replace('_', ' ')}</span></p>
-                            <p className="text-muted-foreground">Enviado: {enrollment.payment_proof_submitted_at ? new Date(enrollment.payment_proof_submitted_at).toLocaleString() : '-'}</p>
-                        </div>
-                        <ApproveButton enrollmentId={enrollment.id} />
-                    </CardContent>
-                </Card>
-            ))}
-        </div>
-      )}
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Ingresos Estimados</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">${estimatedRevenue.toLocaleString()} MXN</div>
+            <p className="text-xs text-muted-foreground">
+              Mensuales recurrentes
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Pagos Pendientes</CardTitle>
+            <AlertCircle className="h-4 w-4 text-yellow-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{pendingPayments}</div>
+            <p className="text-xs text-muted-foreground">
+              Requieren atención o seguimiento
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Registros</CardTitle>
+            <BookOpen className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{totalUsers}</div>
+            <p className="text-xs text-muted-foreground">
+              Base de datos total
+            </p>
+          </CardContent>
+        </Card>
+
+      </div>
     </div>
-  )
+  );
 }

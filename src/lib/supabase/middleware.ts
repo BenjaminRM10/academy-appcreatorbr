@@ -49,6 +49,20 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
+  // Admin Protection: Double check that /admin is only for admins
+  if (user && pathname.startsWith('/admin')) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+      
+      if (profile?.role !== 'admin') {
+          // If not admin, kick back to student dashboard (or home)
+          return NextResponse.redirect(new URL('/student/dashboard', request.url))
+      }
+  }
+
   // Auth routes (redirect if already logged in)
   if (pathname === '/login') {
     if (user) {

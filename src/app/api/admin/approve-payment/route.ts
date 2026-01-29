@@ -1,46 +1,42 @@
-import { createClient } from '@/lib/supabase/server'
-import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
-  const supabase = await createClient()
+export async function POST(request: NextRequest) {
+  const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  // 1. Verify Admin Auth
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const { data: profile } = await supabase
     .from('profiles')
     .select('role')
     .eq('id', user.id)
-    .single()
+    .single();
 
   if (profile?.role !== 'admin') {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
-  const { enrollmentId } = await req.json()
+  // 2. Process Request
+  const { userId } = await request.json();
 
-  if (!enrollmentId) {
-    return NextResponse.json({ error: 'Missing enrollmentId' }, { status: 400 })
-  }
+  if (!userId) return NextResponse.json({ error: 'User ID required' }, { status: 400 });
 
+  // 3. Update Enrollment
   const { error } = await supabase
     .from('enrollments')
-    .update({
-      payment_status: 'paid',
-      status: 'active',
-      payment_proof_status: 'verified',
-      paid_at: new Date().toISOString(),
+    .update({ 
+        payment_status: 'paid',
+        status: 'active',
+        paid_at: new Date().toISOString()
     })
-    .eq('id', enrollmentId)
+    .eq('user_id', userId)
+    .eq('payment_status', 'pending'); // Safety check
 
   if (error) {
-    return NextResponse.json({ error: 'Error processing request' }, { status: 500 })
+      return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({ success: true })
+  return NextResponse.json({ success: true });
 }
