@@ -13,7 +13,7 @@ export default async function AdminUsersPage() {
         id, 
         full_name, 
         phone,
-        enrollments(status, payment_status, courses(title))
+        enrollments(status, payment_status, courses(name))
     `)
     .eq('role', 'student') // Only students
     .order('created_at', { ascending: false });

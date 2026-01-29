@@ -19,17 +19,13 @@ import { Search, Loader2, CheckCircle, XCircle } from 'lucide-react';
 
 interface UserData {
   id: string;
-  email: string; // From auth.users, joined loosely or handled via view? Actually profiles doesn't have email usually. 
-                 // We might need to join with a view or store email in profiles for easier admin.
-                 // For now, let's assume we fetch profiles and maybe we can't show email if it's not in profile.
-                 // Wait, profile usually copies email or we join.
-                 // Let's rely on profiles data.
+  email: string;
   full_name: string;
   phone: string;
   enrollments: {
       status: string;
       payment_status: string;
-      courses: { title: string } | null;
+      courses: { name: string } | null;
   }[];
 }
 
@@ -87,7 +83,7 @@ export function UsersTable({ initialUsers }: { initialUsers: any[] }) {
         />
       </div>
 
-      <div className="rounded-md border bg-white">
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
@@ -107,7 +103,7 @@ export function UsersTable({ initialUsers }: { initialUsers: any[] }) {
                     <TableRow key={user.id}>
                         <TableCell className="font-medium">{user.full_name || 'Sin Nombre'}</TableCell>
                         <TableCell>{user.phone || '-'}</TableCell>
-                        <TableCell>{enrollment?.courses?.title || 'Sin Curso'}</TableCell>
+                        <TableCell>{enrollment?.courses?.name || 'Sin Curso'}</TableCell>
                         <TableCell>
                             <Badge variant={isPaid ? 'default' : 'secondary'} className={isPaid ? 'bg-green-600' : 'bg-yellow-500 text-yellow-950'}>
                                 {isPaid ? 'Pagado' : 'Pendiente'}

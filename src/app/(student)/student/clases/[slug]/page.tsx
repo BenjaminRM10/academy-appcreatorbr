@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, FileText, Video, ExternalLink, Download, MessageSquare } from 'lucide-react';
+import { ArrowLeft, FileText, Video, ExternalLink, Download, MessageSquare, PlayCircle } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 

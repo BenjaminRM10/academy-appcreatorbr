@@ -23,9 +23,9 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { createClient } from "@/lib/supabase/client"
 import { useToast } from "@/hooks/use-toast"
 import { Loader2, Send } from "lucide-react"
+import { submitSupportTicket } from "@/app/actions/support"
 
 const ticketSchema = z.object({
   category: z.string().min(1, "Selecciona una categoría"),
@@ -38,7 +38,6 @@ type TicketFormData = z.infer<typeof ticketSchema>
 export function SupportTicketForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
-  const supabase = createClient()
   
   const form = useForm<TicketFormData>({
     resolver: zodResolver(ticketSchema),
@@ -52,26 +51,10 @@ export function SupportTicketForm() {
   const onSubmit = async (data: TicketFormData) => {
     setIsSubmitting(true)
     try {
-      // Get current session for the JWT
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-          throw new Error("No hay sesión activa");
-      }
+      const result = await submitSupportTicket(data)
 
-      // Call Supabase Edge Function
-      const response = await fetch("https://izkevbsyeqihydfzkuzt.supabase.co/functions/v1/send-support-ticket", {
-        method: "POST",
-        headers: { 
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${session.access_token}`
-        },
-        body: JSON.stringify(data),
-      })
-
-      if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || "Error al enviar");
+      if (result.error) {
+        throw new Error(result.error)
       }
 
       toast({
@@ -80,10 +63,10 @@ export function SupportTicketForm() {
       })
       
       form.reset()
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: "No se pudo enviar el ticket. Intenta de nuevo.",
+        description: error.message || "No se pudo enviar el ticket. Intenta de nuevo.",
         variant: "destructive",
       })
     } finally {

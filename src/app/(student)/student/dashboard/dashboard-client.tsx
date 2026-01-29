@@ -16,7 +16,7 @@ interface Profile { full_name: string }
 
 interface Course {
     id: string;
-    title: string;
+    name: string;
     description?: string;
     duration?: string;
 }
@@ -78,14 +78,15 @@ export default function StudentDashboardClient() {
         .from('enrollments')
         .select(`payment_status, created_at, course_id, group_id`)
         .eq('user_id', currentUser.id)
-        .single();
+        .order('created_at', { ascending: false })
+        .maybeSingle();
         
       // 2b. Fetch Profile Data
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select(`full_name`)
         .eq('id', currentUser.id)
-        .single();
+        .maybeSingle();
 
       if (enrollment) {
           // 3. Fetch Course Data if course_id exists
@@ -94,7 +95,7 @@ export default function StudentDashboardClient() {
                   .from('courses')
                   .select('*')
                   .eq('id', enrollment.course_id)
-                  .single();
+                  .maybeSingle();
               setCourseData(course);
           }
           // 4. Fetch Group Data if group_id exists
@@ -103,7 +104,7 @@ export default function StudentDashboardClient() {
                 .from('groups')
                 .select('name, schedule')
                 .eq('id', enrollment.group_id)
-                .single();
+                .maybeSingle();
             setGroupData(group);
           }
       }
@@ -145,7 +146,8 @@ export default function StudentDashboardClient() {
 
   // Use real course data or fallback to default
   const displayCourse = courseData || {
-      title: 'AppCreatorBR: Desarrollo Full-Stack',
+      id: '',
+      name: 'AppCreatorBR: Desarrollo Full-Stack',
       duration: '12 Semanas',
   };
 
@@ -188,7 +190,7 @@ export default function StudentDashboardClient() {
         <div className="lg:col-span-2 space-y-6">
             <CourseCard
                 courseId={displayCourse.id}
-                courseName={displayCourse.title}
+                courseName={displayCourse.name}
                 enrolledDate={enrollmentDate}
                 courseDuration={displayCourse.duration || 'Flexible'}
                 progress={5} // Hardcoded progress for now (Fase 1 started)
@@ -196,8 +198,8 @@ export default function StudentDashboardClient() {
                 schedule={formatSchedule(groupData?.schedule)}
             />
 
-            {/* Simulators Preview (Teaser for Phase 6) */}
-            <Card className="bg-gradient-to-br from-violet-500/10 via-transparent to-cyan-500/10 border-dashed border-2">
+            {/* Simulators Preview */}
+            <Card className="bg-gradient-to-br from-violet-500/10 via-transparent to-cyan-500/10 border-2">
                 <CardHeader>
                     <div className="flex items-center gap-2">
                         <Gamepad2 className="h-6 w-6 text-purple-500" />
@@ -210,10 +212,13 @@ export default function StudentDashboardClient() {
                 <CardContent>
                     <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
                         <p className="text-sm text-muted-foreground">
-                            Próximamente disponible: Simulador de Despliegue en Servidores y Configuración de DNS.
+                            Simulador de Terminal Linux: Aprende comandos básicos de forma gamificada.
                         </p>
-                        <Button disabled variant="secondary" className="w-full sm:w-auto">
-                            Próximamente
+                        <Button variant="default" className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500" asChild>
+                            <Link href="/student/simuladores/terminal">
+                                Jugar Ahora
+                                <ArrowRight className="ml-2 h-4 w-4" />
+                            </Link>
                         </Button>
                     </div>
                 </CardContent>
@@ -224,7 +229,8 @@ export default function StudentDashboardClient() {
         <div className="space-y-6">
             <NextClassCard 
                 scheduleTime={groupData?.schedule?.time} 
-                // We could pass a dynamic date here if we had logic to calculate "Next [Day]"
+                scheduleDays={groupData?.schedule?.days}
+                startDate="2026-02-16" // Hardcoded start date for Course 1
             />
             
             <Card>

@@ -14,14 +14,18 @@ export default async function MisClasesPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
 
-  // 2. Get Enrollments (Active only)
-  // We want to know WHICH course the student is taking to show the correct syllabus.
-  const { data: enrollment } = await supabase
+  // 2. Get Enrollments
+  // Use maybeSingle to handle 0 or 1 result gracefully.
+  // We prioritize 'paid' status, but fetch whatever is there to debug.
+  const { data: enrollments, error } = await supabase
     .from('enrollments')
-    .select('course_id, created_at, courses(title, number)')
+    .select('course_id, payment_status, created_at, courses(name, number)')
     .eq('user_id', user.id)
-    .eq('payment_status', 'paid')
-    .single();
+    .order('created_at', { ascending: false });
+
+  // Filter for the active course
+  const enrollment = enrollments?.find(e => e.payment_status === 'paid' || e.payment_status === 'active') 
+                     || enrollments?.[0]; // Fallback to latest if none paid
 
   if (!enrollment) {
       return (
@@ -35,10 +39,27 @@ export default async function MisClasesPage() {
       );
   }
 
-  // 3. Get Syllabus Logic
-  // Default to Course 1 if no number found, but we should have it.
-  const courseNumber = enrollment.courses?.number || 1;
-  const syllabus = getSyllabusByCourseId(enrollment.course_id, courseNumber);
+  // Debug Message if payment is not clean 'paid'
+  const showPaymentWarning = enrollment.payment_status !== 'paid' && enrollment.payment_status !== 'active';
+
+  // 3. Get Course details (fetch by course_id if necessary)
+  let courseNumber = enrollment.courses?.number;
+  let courseName = enrollment.courses?.name || '';
+
+  if (!courseNumber && enrollment.course_id) {
+    const { data: courseById } = await supabase
+      .from('courses')
+      .select('id, name, number')
+      .eq('id', enrollment.course_id)
+      .single();
+    if (courseById) {
+      courseNumber = courseById.number;
+      courseName = courseById.name;
+    }
+  }
+
+  // Default to Course 1 if no number found
+  const syllabus = getSyllabusByCourseId(enrollment.course_id, courseNumber || 1);
 
   if (!syllabus) return <div>Error cargando temario.</div>;
 
@@ -53,6 +74,11 @@ export default async function MisClasesPage() {
             <h1 className="text-3xl font-bold tracking-tight">Mis Clases</h1>
             <p className="text-muted-foreground mt-1">
                 {syllabus.title}
+                {showPaymentWarning && (
+                    <span className="ml-2 text-yellow-500 text-xs bg-yellow-500/10 px-2 py-1 rounded border border-yellow-500/20">
+                        Estado: {enrollment.payment_status} (Acceso limitado)
+                    </span>
+                )}
             </p>
         </div>
       </div>
