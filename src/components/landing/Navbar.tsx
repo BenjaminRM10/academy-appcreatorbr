@@ -1,22 +1,17 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { Hexagon } from "lucide-react";
 
 export function Navbar() {
   return (
     <nav className="fixed top-0 w-full z-50 glass border-b border-white/5">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="relative w-8 h-8">
-            <Image 
-              src="/logo.png" 
-              alt="Academy Logo" 
-              fill
-              className="object-contain"
-            />
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="relative w-10 h-10 flex items-center justify-center bg-gradient-to-tr from-cyan-500 to-purple-600 rounded-lg group-hover:scale-105 transition-transform duration-300 shadow-lg shadow-cyan-500/20">
+             <Hexagon className="w-6 h-6 text-white fill-white/20" />
           </div>
-          <span className="font-bold text-lg tracking-tight">
-            Academy<span className="text-cyan-400">.Br</span>
+          <span className="font-bold text-lg tracking-tight group-hover:text-cyan-100 transition-colors">
+            Academy<span className="text-cyan-400">BR</span>
           </span>
         </Link>
 

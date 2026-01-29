@@ -14,13 +14,13 @@ export function Footer() {
         </div>
         
         <div className="flex gap-6">
-          <Link href="#" className="text-gray-500 hover:text-cyan-400 transition-colors">
+          <Link href="https://x.com/BenjaminRdzM10" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-cyan-400 transition-colors">
             Twitter
           </Link>
-          <Link href="#" className="text-gray-500 hover:text-purple-400 transition-colors">
+          <Link href="https://www.linkedin.com/in/alejandro-benjamin-rodriguez-mares-20b871236/" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-purple-400 transition-colors">
             LinkedIn
           </Link>
-          <Link href="#" className="text-gray-500 hover:text-white transition-colors">
+          <Link href="https://github.com/BenjaminRM10" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white transition-colors">
             GitHub
           </Link>
         </div>

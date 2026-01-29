@@ -3,18 +3,39 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { PaymentAlert } from '@/components/student/PaymentAlert';
 import { NextClassCard } from '@/components/student/NextClassCard';
 import { CourseCard } from '@/components/student/CourseCard';
+import { Gamepad2, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
-// Define the expected data types (simplified)
+// Define the expected data types
 interface Profile { full_name: string }
+
+interface Course {
+    id: string;
+    title: string;
+    description?: string;
+    duration?: string;
+}
+
+interface Group {
+    name: string;
+    schedule: {
+        days: string[];
+        time: string;
+    };
+}
 
 interface Enrollment {
   payment_status: 'pending' | 'paid' | 'canceled';
   created_at: string;
+  course_id?: string;
+  group_id?: string;
   profiles: Profile | null;
+  courses?: Course | null; // If we can join
   [key: string]: any;
 }
 
@@ -29,6 +50,8 @@ export default function StudentDashboardClient() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const [enrollmentData, setEnrollmentData] = useState<Enrollment | null>(null);
+  const [courseData, setCourseData] = useState<Course | null>(null);
+  const [groupData, setGroupData] = useState<Group | null>(null);
   const router = useRouter();
 
   const supabase = createClient();
@@ -50,29 +73,45 @@ export default function StudentDashboardClient() {
       setUser(currentUser);
 
       // 2. Fetch Enrollment Data
+      // We try to fetch course_id to then fetch the course details
       const { data: enrollment, error: enrollmentError } = await supabase
         .from('enrollments')
-        .select(`payment_status, created_at`)
+        .select(`payment_status, created_at, course_id, group_id`)
         .eq('user_id', currentUser.id)
         .single();
         
-      // 2b. Fetch Profile Data (separately to avoid schema cache issues)
+      // 2b. Fetch Profile Data
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select(`full_name`)
         .eq('id', currentUser.id)
         .single();
 
-      if (enrollmentError || profileError) {
-        console.error('Data fetching error (enrollment or profile):', enrollmentError?.message || profileError?.message);
-        // Continue even with error, to allow redirection logic to handle no enrollments
+      if (enrollment) {
+          // 3. Fetch Course Data if course_id exists
+          if (enrollment.course_id) {
+              const { data: course } = await supabase
+                  .from('courses')
+                  .select('*')
+                  .eq('id', enrollment.course_id)
+                  .single();
+              setCourseData(course);
+          }
+          // 4. Fetch Group Data if group_id exists
+          if (enrollment.group_id) {
+            const { data: group } = await supabase
+                .from('groups')
+                .select('name, schedule')
+                .eq('id', enrollment.group_id)
+                .single();
+            setGroupData(group);
+          }
       }
 
       const mergedEnrollment = enrollment ? { ...enrollment, profiles: profile } : null;
 
-      if (!mergedEnrollment) {
-        // User is logged in but has no enrollment record. Redirect to payment/onboarding.
-        console.log('User has no enrollment, redirecting to /pago.');
+      if (!mergedEnrollment && !enrollmentError) {
+        // User logged in but no enrollment.
         router.push('/pago');
         return;
       }
@@ -88,17 +127,15 @@ export default function StudentDashboardClient() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <div className="text-center">
-          <p className="text-xl font-medium text-gray-400">Cargando tu dashboard...</p>
-        </div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
+        <p className="text-muted-foreground">Cargando tu experiencia...</p>
       </div>
     );
   }
 
-  // If loading is false, and user/enrollmentData is missing, it means
-  // the redirects in useEffect failed or returned too quickly.
   if (!user || !enrollmentData) {
-    return <p>Error interno: No se pudieron cargar los datos.</p>;
+     // Fallback for empty state or error
+     return <div className="p-8 text-center">No se encontraron datos de inscripción.</div>;
   }
 
   const { payment_status, created_at } = enrollmentData;
@@ -106,65 +143,117 @@ export default function StudentDashboardClient() {
   const fullName = profile?.full_name || user.user_metadata?.full_name || user.email;
   const firstName = fullName.split(' ')[0];
 
-  const mockCourse = {
-      name: 'AppCreatorBR: Desarrollo Full-Stack',
-      duration: '3 meses (200 horas)',
+  // Use real course data or fallback to default
+  const displayCourse = courseData || {
+      title: 'AppCreatorBR: Desarrollo Full-Stack',
+      duration: '12 Semanas',
   };
 
   const enrollmentDate = new Date(created_at).toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
 
-  return (
-    <div className="space-y-8 p-4 md:p-8">
-      {/* Welcome Card */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-3xl font-extrabold tracking-tight">
-            ¡Bienvenido(a), {firstName}! 👋
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">
-            Este es tu panel de control de AppCreatorBR Academy. Aquí encontrarás todo sobre tu curso y los siguientes pasos.
-          </p>
-        </CardContent>
-      </Card>
+  // Format schedule if available
+  const formatSchedule = (schedule?: { days: string[]; time: string }) => {
+    if (!schedule) return undefined;
+    const dayNames: Record<string, string> = {
+        mon: "Lun", tue: "Mar", wed: "Mié", thu: "Jue", fri: "Vie", sat: "Sáb", sun: "Dom"
+    };
+    const days = schedule.days.map((d) => dayNames[d] || d).join(", ");
+    return `${days} ${schedule.time}`;
+  };
 
-      {/* Payment Status Check & Alert */}
+  return (
+    <div className="space-y-8">
+      {/* Welcome Section */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+            <h1 className="text-3xl font-bold tracking-tight">Hola, {firstName} 👋</h1>
+            <p className="text-muted-foreground mt-1">
+                Bienvenido a tu panel de control. Aquí comienza tu viaje.
+            </p>
+        </div>
+        <Button variant="outline" asChild>
+            <Link href="/student/perfil">Ver Perfil</Link>
+        </Button>
+      </div>
+
+      {/* Payment Status Check */}
       {payment_status !== 'paid' && (
         <PaymentAlert status={payment_status as 'pending' | 'canceled'} />
       )}
 
-      {/* Main Grid: Course Info and Next Class */}
+      {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <CourseCard
-            courseName={mockCourse.name}
-            enrolledDate={enrollmentDate}
-            courseDuration={mockCourse.duration}
-          />
+        
+        {/* Left Column: Course & Simulators */}
+        <div className="lg:col-span-2 space-y-6">
+            <CourseCard
+                courseId={displayCourse.id}
+                courseName={displayCourse.title}
+                enrolledDate={enrollmentDate}
+                courseDuration={displayCourse.duration || 'Flexible'}
+                progress={5} // Hardcoded progress for now (Fase 1 started)
+                groupName={groupData?.name}
+                schedule={formatSchedule(groupData?.schedule)}
+            />
+
+            {/* Simulators Preview (Teaser for Phase 6) */}
+            <Card className="bg-gradient-to-br from-violet-500/10 via-transparent to-cyan-500/10 border-dashed border-2">
+                <CardHeader>
+                    <div className="flex items-center gap-2">
+                        <Gamepad2 className="h-6 w-6 text-purple-500" />
+                        <CardTitle>Simuladores Interactivos</CardTitle>
+                    </div>
+                    <CardDescription>
+                        Practica tus habilidades en entornos reales.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+                        <p className="text-sm text-muted-foreground">
+                            Próximamente disponible: Simulador de Despliegue en Servidores y Configuración de DNS.
+                        </p>
+                        <Button disabled variant="secondary" className="w-full sm:w-auto">
+                            Próximamente
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
 
-        <NextClassCard />
+        {/* Right Column: Next Class & Quick Actions */}
+        <div className="space-y-6">
+            <NextClassCard 
+                scheduleTime={groupData?.schedule?.time} 
+                // We could pass a dynamic date here if we had logic to calculate "Next [Day]"
+            />
+            
+            <Card>
+                <CardHeader>
+                    <CardTitle className="text-lg">Recursos</CardTitle>
+                </CardHeader>
+                <CardContent className="grid gap-2">
+                    <Button variant="ghost" className="justify-start h-auto py-3" asChild>
+                        <Link href="/student/materiales">
+                            <span className="flex-1 text-left">📚 Documentación</span>
+                            <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                        </Link>
+                    </Button>
+                    <Button variant="ghost" className="justify-start h-auto py-3" asChild>
+                        <Link href="https://discord.gg/appcreatorbr" target="_blank">
+                            <span className="flex-1 text-left">💬 Comunidad Discord</span>
+                            <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                        </Link>
+                    </Button>
+                    <Button variant="ghost" className="justify-start h-auto py-3" asChild>
+                        <Link href="/soporte">
+                            <span className="flex-1 text-left">🎫 Soporte Técnico</span>
+                            <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                        </Link>
+                    </Button>
+                </CardContent>
+            </Card>
+        </div>
       </div>
-
-      {/* Quick Resources Placeholder */}
-      <section className="space-y-4 pt-4">
-        <h2 className="text-2xl font-semibold">Recursos Rápidos</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Card className="p-4 text-center hover:bg-muted/50 transition cursor-pointer">
-            <CardTitle className="text-lg">Comunidad</CardTitle>
-            <p className="text-sm text-muted-foreground">Accede al Discord</p>
-          </Card>
-          <Card className="p-4 text-center hover:bg-muted/50 transition cursor-pointer">
-            <CardTitle className="text-lg">Soporte</CardTitle>
-            <p className="text-sm text-muted-foreground">Abrir un ticket</p>
-          </Card>
-          <Card className="p-4 text-center hover:bg-muted/50 transition cursor-pointer">
-            <CardTitle className="text-lg">Certificado</CardTitle>
-            <p className="text-sm text-muted-foreground">Emitir al finalizar</p>
-          </Card>
-        </div>
-      </section>
     </div>
   );
 }

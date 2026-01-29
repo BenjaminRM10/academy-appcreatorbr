@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
@@ -136,8 +137,10 @@ export function CourseGrid() {
               </CardContent>
 
               <CardFooter className="pt-0 mt-auto">
-                <Button className="w-full bg-white/5 hover:bg-white/10 text-white border border-white/10">
-                  Ver Detalles
+                <Button className="w-full bg-white/5 hover:bg-white/10 text-white border border-white/10" asChild>
+                  <Link href={`/curso/${course.id}`}>
+                    Ver Detalles
+                  </Link>
                 </Button>
               </CardFooter>
             </Card>
