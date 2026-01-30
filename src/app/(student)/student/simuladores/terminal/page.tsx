@@ -1,15 +1,13 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Terminal } from 'xterm';
-import { FitAddon } from 'xterm-addon-fit';
-import 'xterm/css/xterm.css';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Trophy, CheckCircle, HelpCircle } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
-
 import { LEVELS, Level } from '@/lib/simulator-levels';
+import type { Terminal } from 'xterm';
+import type { FitAddon } from 'xterm-addon-fit';
 
 // --- MOCK FILESYSTEM (In-Memory) ---
 const INITIAL_FS_ROOT = {
@@ -68,40 +66,49 @@ export default function TerminalSimulator() {
     useEffect(() => {
         if (!terminalRef.current) return;
 
-        // Initialize xterm
-        const term = new Terminal({
-            cursorBlink: true,
-            fontSize: 14,
-            fontFamily: '"Fira Code", monospace',
-            theme: {
-                background: '#09090b',
-                foreground: '#f4f4f5',
-                cursor: '#22d3ee'
-            }
-        });
+        let term: Terminal | null = null;
+        let fitAddon: FitAddon | null = null;
 
-        const fitAddon = new FitAddon();
-        term.loadAddon(fitAddon);
-        term.open(terminalRef.current);
-        
-        // Fix for dimensions error: wait for next tick
-        setTimeout(() => {
-            try {
-                fitAddon.fit();
-            } catch (e) { console.error(e); }
-        }, 100);
+        // Dynamically import xterm only on client
+        const initTerminal = async () => {
+            const { Terminal } = await import('xterm');
+            const { FitAddon } = await import('xterm-addon-fit');
+            await import('xterm/css/xterm.css');
 
-        xtermRef.current = term;
+            // Initialize xterm
+            term = new Terminal({
+                cursorBlink: true,
+                fontSize: 14,
+                fontFamily: '"Fira Code", monospace',
+                theme: {
+                    background: '#09090b',
+                    foreground: '#f4f4f5',
+                    cursor: '#22d3ee'
+                }
+            });
 
-        // Welcome Message
-        term.writeln('\x1b[1;36m~ Runa Academy Terminal v2.0 ~\x1b[0m');
-        term.writeln('Sistema listo. Escribe "help" para ver comandos.');
-        term.writeln('');
-        prompt(term);
+            fitAddon = new FitAddon();
+            term.loadAddon(fitAddon);
+            term.open(terminalRef.current!);
+            
+            // Fix for dimensions error: wait for next tick
+            setTimeout(() => {
+                try {
+                    fitAddon!.fit();
+                } catch (e) { console.error(e); }
+            }, 100);
 
-        let currentLine = '';
+            xtermRef.current = term;
 
-        term.onData(e => {
+            // Welcome Message
+            term.writeln('\x1b[1;36m~ Runa Academy Terminal v2.0 ~\x1b[0m');
+            term.writeln('Sistema listo. Escribe "help" para ver comandos.');
+            term.writeln('');
+            prompt(term);
+
+            let currentLine = '';
+
+            term.onData(e => {
             switch (e) {
                 case '\r': // Enter
                     term.write('\r\n');
@@ -138,14 +145,26 @@ export default function TerminalSimulator() {
             }
         });
 
-        const handleResize = () => {
-            try { fitAddon.fit(); } catch(e) {}
+            const handleResize = () => {
+                try { fitAddon!.fit(); } catch(e) {}
+            };
+            window.addEventListener('resize', handleResize);
+
+            return () => {
+                term?.dispose();
+                window.removeEventListener('resize', handleResize);
+            };
         };
-        window.addEventListener('resize', handleResize);
+
+        initTerminal().then(cleanup => {
+            // Store cleanup function for useEffect cleanup
+            if (cleanup) {
+                return cleanup;
+            }
+        });
 
         return () => {
-            term.dispose();
-            window.removeEventListener('resize', handleResize);
+            // Cleanup will be handled by the async init
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -316,8 +335,7 @@ export default function TerminalSimulator() {
         if (currentLvl.check(historyRef.current, fsRef.current)) {
             toast({
                 title: "¡Nivel Completado!",
-                description: `Has ganado ${currentLvl.xp} XP.`,
-                className: "bg-green-600 text-white border-none"
+                description: `Has ganado ${currentLvl.xp} XP.`
             });
             setXp(prev => prev + currentLvl.xp);
             

@@ -5,6 +5,13 @@ import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
+type EnrollmentWithCourse = {
+  created_at: string;
+  payment_status: string;
+  status: string;
+  courses: { name: string; price: number } | null;
+};
+
 export default async function HistorialPagosPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -13,7 +20,8 @@ export default async function HistorialPagosPage() {
     .from('enrollments')
     .select('created_at, payment_status, status, courses(name, price)')
     .eq('user_id', user?.id)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .returns<EnrollmentWithCourse[]>();
 
   return (
     <div className="space-y-6 animate-in fade-in">

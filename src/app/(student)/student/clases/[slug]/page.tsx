@@ -12,6 +12,11 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+type EnrollmentWithCourseNumber = {
+  course_id: string;
+  courses: { number: number } | null;
+};
+
 export default async function ClasePlayerPage({ params }: PageProps) {
   const { slug } = await params; // "semana-1"
   const weekNumber = parseInt(slug.split('-')[1]);
@@ -26,7 +31,7 @@ export default async function ClasePlayerPage({ params }: PageProps) {
     .select('course_id, courses(number)')
     .eq('user_id', user.id)
     .eq('payment_status', 'paid')
-    .single();
+    .single<EnrollmentWithCourseNumber>();
 
   if (!enrollment) redirect('/student/dashboard');
 

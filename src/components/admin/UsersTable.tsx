@@ -19,14 +19,13 @@ import { Search, Loader2, CheckCircle, XCircle } from 'lucide-react';
 
 interface UserData {
   id: string;
-  email: string;
   full_name: string;
   phone: string;
-  enrollments: {
+  enrollments: Array<{
       status: string;
       payment_status: string;
       courses: { name: string } | null;
-  }[];
+  }>;
 }
 
 export function UsersTable({ initialUsers }: { initialUsers: any[] }) {

@@ -7,6 +7,13 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getSyllabusByCourseId } from '@/lib/syllabus-data';
 
+type EnrollmentWithCourse = {
+  course_id: string;
+  payment_status: string;
+  created_at: string;
+  courses: { name: string; number: number } | null;
+};
+
 export default async function MisClasesPage() {
   const supabase = await createClient();
 
@@ -21,7 +28,8 @@ export default async function MisClasesPage() {
     .from('enrollments')
     .select('course_id, payment_status, created_at, courses(name, number)')
     .eq('user_id', user.id)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .returns<EnrollmentWithCourse[]>();
 
   // Filter for the active course
   const enrollment = enrollments?.find(e => e.payment_status === 'paid' || e.payment_status === 'active') 

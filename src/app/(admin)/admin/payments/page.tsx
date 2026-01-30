@@ -8,6 +8,16 @@ import { es } from 'date-fns/locale';
 import { CheckCircle, Clock } from 'lucide-react';
 import Link from 'next/link';
 
+type EnrollmentWithCourse = {
+  id: string;
+  created_at: string;
+  payment_status: string;
+  payment_method: string;
+  user_id: string;
+  course_id: string;
+  courses: { name: string; price: number } | null;
+};
+
 export default async function AdminPaymentsPage() {
   const supabase = await createClient();
 
@@ -24,7 +34,8 @@ export default async function AdminPaymentsPage() {
       courses(name, price)
     `)
     .eq('payment_status', 'pending')
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .returns<EnrollmentWithCourse[]>();
 
   // Fetch user profiles separately
   const userIds = pendingPayments?.map(p => p.user_id) || [];
