@@ -20,8 +20,11 @@ export const metadata: Metadata = {
   keywords: ["cursos IA", "Next.js", "Supabase", "automatización", "ingeniería", "programación", "inteligencia artificial"],
   authors: [{ name: "Runa Academy" }],
   icons: {
-    icon: "/runa-favicon.png",
-    shortcut: "/runa-favicon.png",
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/runa-favicon.png", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
     apple: "/runa-favicon.png",
   },
   openGraph: {
