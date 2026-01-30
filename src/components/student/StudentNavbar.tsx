@@ -18,7 +18,7 @@ export function StudentNavbar() {
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between px-4">
         <Link href="/student/dashboard" className="flex items-center space-x-2">
             <div className="w-8 h-8 rounded-lg overflow-hidden">
-                <img src="/logo.png?v=2" alt="Runa Academy" className="w-full h-full object-contain" />
+                <img src="/runa-logo.png" alt="Runa Academy" className="w-full h-full object-contain" />
             </div>
           <span className="font-bold text-xl bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
             Runa Academy
