@@ -15,15 +15,20 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Academy | Escuela de Ingeniería y Tecnología 4.0",
-  description: "Cursos especializados en IA, automatización, desarrollo web y tecnología 4.0 para ingenieros y profesionistas en Saltillo, Coahuila.",
-  keywords: ["cursos IA", "automatización", "ingeniería 4.0", "Saltillo", "programación", "inteligencia artificial"],
-  authors: [{ name: "Ing. Benjamin Rodriguez" }],
+  title: "Clawd Academy | Ingeniería Asistida por IA",
+  description: "Aprende a construir productos con IA. Curso intensivo de Next.js, Supabase y herramientas de inteligencia artificial para ingenieros.",
+  keywords: ["cursos IA", "Next.js", "Supabase", "automatización", "ingeniería", "programación", "inteligencia artificial"],
+  authors: [{ name: "Clawd Academy" }],
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   openGraph: {
-    title: "Academy | Escuela de Ingeniería y Tecnología 4.0",
-    description: "Cursos especializados en IA, automatización, desarrollo web y tecnología 4.0",
+    title: "Clawd Academy | Ingeniería Asistida por IA",
+    description: "Aprende a construir productos con IA. Curso intensivo de Next.js, Supabase y herramientas de inteligencia artificial.",
     url: "https://academy.appcreatorbr.com",
-    siteName: "Academy AppCreatorBR",
+    siteName: "Clawd Academy",
     locale: "es_MX",
     type: "website",
   },

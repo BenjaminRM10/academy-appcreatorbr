@@ -1,17 +1,23 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Hexagon } from "lucide-react";
 
 export function Navbar() {
   return (
     <nav className="fixed top-0 w-full z-50 glass border-b border-white/5">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="relative w-10 h-10 flex items-center justify-center bg-gradient-to-tr from-cyan-500 to-purple-600 rounded-lg group-hover:scale-105 transition-transform duration-300 shadow-lg shadow-cyan-500/20">
-             <Hexagon className="w-6 h-6 text-white fill-white/20" />
+          <div className="relative w-10 h-10 flex items-center justify-center bg-gradient-to-tr from-purple-600 to-cyan-500 rounded-xl group-hover:scale-105 transition-transform duration-300 shadow-lg shadow-purple-500/20">
+             <svg width="24" height="24" viewBox="0 0 32 32" fill="none" className="text-white">
+               <circle cx="16" cy="12" r="3" fill="currentColor"/>
+               <circle cx="10" cy="20" r="2.5" fill="currentColor" opacity="0.9"/>
+               <circle cx="22" cy="20" r="2.5" fill="currentColor" opacity="0.9"/>
+               <path d="M16 15L10 17.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.8"/>
+               <path d="M16 15L22 17.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.8"/>
+               <path d="M10 20L22 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.6"/>
+             </svg>
           </div>
           <span className="font-bold text-lg tracking-tight group-hover:text-cyan-100 transition-colors">
-            Academy<span className="text-cyan-400">BR</span>
+            Clawd<span className="text-cyan-400">Academy</span>
           </span>
         </Link>
 
