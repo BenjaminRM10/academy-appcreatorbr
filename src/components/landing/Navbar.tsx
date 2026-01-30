@@ -8,7 +8,7 @@ export function Navbar() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 group">
           <div className="relative w-10 h-10 rounded-xl overflow-hidden group-hover:scale-105 transition-transform duration-300 shadow-lg shadow-purple-500/20">
-             <Image src="/logo.png" alt="Runa Academy" width={40} height={40} className="object-contain" />
+             <Image src="/logo.png?v=2" alt="Runa Academy" width={40} height={40} className="object-contain" />
           </div>
           <span className="font-bold text-xl tracking-tight group-hover:text-cyan-100 transition-colors">
             Runa<span className="text-cyan-400">Academy</span>

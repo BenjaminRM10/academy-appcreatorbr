@@ -38,7 +38,7 @@ export function AdminSidebar() {
         <div className="flex h-14 items-center border-b border-white/10 px-4 lg:h-[60px] lg:px-6 bg-purple-950/30">
           <Link href="/admin/dashboard" className="flex items-center gap-2 font-semibold">
             <div className="w-9 h-9 rounded-lg overflow-hidden">
-               <img src="/logo.png" alt="Runa Academy" className="w-full h-full object-contain" />
+               <img src="/logo.png?v=2" alt="Runa Academy" className="w-full h-full object-contain" />
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
               Runa Admin
