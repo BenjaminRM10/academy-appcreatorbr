@@ -19,14 +19,6 @@ export const metadata: Metadata = {
   description: "Aprende a construir productos con IA. Curso intensivo de Next.js, Supabase y herramientas de inteligencia artificial para ingenieros.",
   keywords: ["cursos IA", "Next.js", "Supabase", "automatización", "ingeniería", "programación", "inteligencia artificial"],
   authors: [{ name: "Runa Academy" }],
-  icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/runa-favicon.png", type: "image/png" },
-    ],
-    shortcut: "/favicon.ico",
-    apple: "/runa-favicon.png",
-  },
   openGraph: {
     title: "Runa Academy | Ingeniería Asistida por IA",
     description: "Aprende a construir productos con IA. Curso intensivo de Next.js, Supabase y herramientas de inteligencia artificial.",

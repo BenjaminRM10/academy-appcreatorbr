@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
-import { Loader2, Send } from "lucide-react"
+import { Loader2, Send, CheckCircle } from "lucide-react"
 import { submitSupportTicket } from "@/app/actions/support"
 
 const ticketSchema = z.object({
@@ -37,6 +37,7 @@ type TicketFormData = z.infer<typeof ticketSchema>
 
 export function SupportTicketForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
   const { toast } = useToast()
   
   const form = useForm<TicketFormData>({
@@ -57,6 +58,7 @@ export function SupportTicketForm() {
         throw new Error(result.error)
       }
 
+      setIsSuccess(true)
       toast({
         title: "Ticket Enviado",
         description: "Recibimos tu solicitud. Te responderemos pronto a tu correo.",
@@ -72,6 +74,34 @@ export function SupportTicketForm() {
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  const handleNewTicket = () => {
+    setIsSuccess(false)
+    form.reset()
+  }
+
+  if (isSuccess) {
+    return (
+      <Card className="max-w-2xl mx-auto">
+        <CardContent className="pt-6 pb-6">
+          <div className="flex flex-col items-center justify-center text-center space-y-4 py-8">
+            <div className="w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center">
+              <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-xl font-semibold text-foreground">¡Ticket Enviado!</h3>
+              <p className="text-muted-foreground max-w-sm">
+                Hemos recibido tu solicitud de soporte. Te responderemos lo más pronto posible a tu correo electrónico.
+              </p>
+            </div>
+            <Button onClick={handleNewTicket} variant="outline" className="mt-4">
+              Enviar otro ticket
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    )
   }
 
   return (
