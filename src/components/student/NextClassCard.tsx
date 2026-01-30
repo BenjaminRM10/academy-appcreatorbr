@@ -31,7 +31,7 @@ export function NextClassCard({ scheduleTime, scheduleDays, meetLink, startDate 
 
   // 2. Generate Google Calendar Link
   const gCalLink = nextDate ? generateGoogleCalendarUrl({
-      title: "Clase en Vivo - AcademyBR",
+      title: "Clase en Vivo - Runa Academy",
       description: "Clase del curso de Ingeniería. Recuerda tener tu entorno listo.",
       location: finalMeetLink,
       startDate: nextDate,

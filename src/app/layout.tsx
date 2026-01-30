@@ -15,20 +15,20 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Clawd Academy | Ingeniería Asistida por IA",
+  title: "Runa Academy | Ingeniería Asistida por IA",
   description: "Aprende a construir productos con IA. Curso intensivo de Next.js, Supabase y herramientas de inteligencia artificial para ingenieros.",
   keywords: ["cursos IA", "Next.js", "Supabase", "automatización", "ingeniería", "programación", "inteligencia artificial"],
-  authors: [{ name: "Clawd Academy" }],
+  authors: [{ name: "Runa Academy" }],
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
-    apple: "/favicon.svg",
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
   },
   openGraph: {
-    title: "Clawd Academy | Ingeniería Asistida por IA",
+    title: "Runa Academy | Ingeniería Asistida por IA",
     description: "Aprende a construir productos con IA. Curso intensivo de Next.js, Supabase y herramientas de inteligencia artificial.",
     url: "https://academy.appcreatorbr.com",
-    siteName: "Clawd Academy",
+    siteName: "Runa Academy",
     locale: "es_MX",
     type: "website",
   },

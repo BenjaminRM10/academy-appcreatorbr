@@ -37,18 +37,11 @@ export function AdminSidebar() {
       <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-14 items-center border-b border-white/10 px-4 lg:h-[60px] lg:px-6 bg-purple-950/30">
           <Link href="/admin/dashboard" className="flex items-center gap-2 font-semibold">
-            <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-tr from-purple-600 to-cyan-500 rounded-lg">
-               <svg width="20" height="20" viewBox="0 0 32 32" fill="none" className="text-white">
-                 <circle cx="16" cy="12" r="3" fill="currentColor"/>
-                 <circle cx="10" cy="20" r="2.5" fill="currentColor" opacity="0.9"/>
-                 <circle cx="22" cy="20" r="2.5" fill="currentColor" opacity="0.9"/>
-                 <path d="M16 15L10 17.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.8"/>
-                 <path d="M16 15L22 17.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.8"/>
-                 <path d="M10 20L22 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.6"/>
-               </svg>
+            <div className="w-9 h-9 rounded-lg overflow-hidden">
+               <img src="/logo.png" alt="Runa Academy" className="w-full h-full object-contain" />
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              Clawd Admin
+              Runa Admin
             </span>
           </Link>
         </div>

@@ -38,7 +38,7 @@ export default async function HistorialPagosPage() {
                         <TableCell>
                             {format(new Date(item.created_at), "d 'de' MMMM, yyyy", { locale: es })}
                         </TableCell>
-                        <TableCell>{item.courses?.name || 'Curso AcademyBR'}</TableCell>
+                        <TableCell>{item.courses?.name || 'Curso Runa Academy'}</TableCell>
                         <TableCell>${(item.courses?.price || 80000) / 100} MXN</TableCell>
                         <TableCell>
                             <Badge variant={item.payment_status === 'paid' ? 'default' : 'secondary'}>

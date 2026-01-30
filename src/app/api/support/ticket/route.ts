@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
 
     // 4. Send Email via Resend
     const data = await resend.emails.send({
-      from: 'Soporte AcademyBR <onboarding@resend.dev>', // Use default until domain is verified
+      from: 'Soporte Runa Academy <onboarding@resend.dev>', // Use default until domain is verified
       to: ['contacto@appcreatorbr.com'], // Destination
       replyTo: userEmail, // Critical: Allows replying directly to student
       subject: `[Soporte] ${category || 'General'}: ${subject} - ${userName}`,
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
         <h3>${subject}</h3>
         <p style="white-space: pre-wrap;">${description}</p>
         <hr />
-        <p><small>Este correo fue enviado desde la plataforma de estudiantes de AcademyBR.</small></p>
+        <p><small>Este correo fue enviado desde la plataforma de estudiantes de Runa Academy.</small></p>
       `,
     });
 

@@ -41,11 +41,11 @@ export function StudentSidebar() {
       <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
           <Link href="/student/dashboard" className="flex items-center gap-2 font-semibold">
-            <div className="relative w-8 h-8 flex items-center justify-center bg-gradient-to-tr from-cyan-500 to-purple-600 rounded-lg">
-                <Hexagon className="w-5 h-5 text-white fill-white/20" />
+            <div className="w-8 h-8 rounded-lg overflow-hidden">
+                <img src="/logo.png" alt="Runa Academy" className="w-full h-full object-contain" />
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent">
-              AcademyBR
+            <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              Runa Academy
             </span>
           </Link>
         </div>

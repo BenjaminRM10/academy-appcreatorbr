@@ -17,11 +17,11 @@ export function StudentNavbar() {
     <nav className="border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between px-4">
         <Link href="/student/dashboard" className="flex items-center space-x-2">
-            <div className="relative w-8 h-8 flex items-center justify-center bg-gradient-to-tr from-cyan-500 to-purple-600 rounded-lg">
-                <Hexagon className="w-5 h-5 text-white fill-white/20" />
+            <div className="w-8 h-8 rounded-lg overflow-hidden">
+                <img src="/logo.png" alt="Runa Academy" className="w-full h-full object-contain" />
             </div>
-          <span className="font-bold text-xl bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent">
-            AcademyBR
+          <span className="font-bold text-xl bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+            Runa Academy
           </span>
         </Link>
 

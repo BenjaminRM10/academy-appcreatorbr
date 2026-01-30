@@ -94,7 +94,7 @@ export default function TerminalSimulator() {
         xtermRef.current = term;
 
         // Welcome Message
-        term.writeln('\x1b[1;36m~ AcademyBR Terminal v2.0 ~\x1b[0m');
+        term.writeln('\x1b[1;36m~ Runa Academy Terminal v2.0 ~\x1b[0m');
         term.writeln('Sistema listo. Escribe "help" para ver comandos.');
         term.writeln('');
         prompt(term);

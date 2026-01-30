@@ -35,7 +35,7 @@ export async function submitSupportTicket(formData: {
         Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "Soporte AcademyBR <soporte@appcreatorbr.com>",
+        from: "Soporte Runa Academy <soporte@appcreatorbr.com>",
         to: ["contacto@appcreatorbr.com"],
         reply_to: user.email,
         subject: `[Soporte] ${formData.category}: ${formData.subject}`,
