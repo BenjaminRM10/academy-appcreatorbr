@@ -8,6 +8,7 @@ import { toast } from '@/hooks/use-toast';
 import { LEVELS, Level } from '@/lib/simulator-levels';
 import type { Terminal } from 'xterm';
 import type { FitAddon } from 'xterm-addon-fit';
+import 'xterm/css/xterm.css';
 
 // --- MOCK FILESYSTEM (In-Memory) ---
 const INITIAL_FS_ROOT = {
@@ -73,7 +74,6 @@ export default function TerminalSimulator() {
         const initTerminal = async () => {
             const { Terminal } = await import('xterm');
             const { FitAddon } = await import('xterm-addon-fit');
-            await import('xterm/css/xterm.css');
 
             // Initialize xterm
             term = new Terminal({
@@ -100,6 +100,9 @@ export default function TerminalSimulator() {
 
             xtermRef.current = term;
 
+            // TypeScript guard: ensure term is not null
+            if (!term) return;
+
             // Welcome Message
             term.writeln('\x1b[1;36m~ Runa Academy Terminal v2.0 ~\x1b[0m');
             term.writeln('Sistema listo. Escribe "help" para ver comandos.');
@@ -108,16 +111,19 @@ export default function TerminalSimulator() {
 
             let currentLine = '';
 
-            term.onData(e => {
+            // Create local ref for closure
+            const terminalInstance = term;
+
+            terminalInstance.onData(e => {
             switch (e) {
                 case '\r': // Enter
-                    term.write('\r\n');
-                    handleCommand(currentLine.trim(), term);
+                    terminalInstance.write('\r\n');
+                    handleCommand(currentLine.trim(), terminalInstance);
                     currentLine = '';
                     break;
                 case '\u007F': // Backspace
                     if (currentLine.length > 0) {
-                        term.write('\b \b');
+                        terminalInstance.write('\b \b');
                         currentLine = currentLine.substring(0, currentLine.length - 1);
                     }
                     break;
@@ -131,7 +137,7 @@ export default function TerminalSimulator() {
                             const matches = Object.keys(currentDirObj.children).filter(name => name.startsWith(lastWord));
                             if (matches.length === 1) {
                                 const completion = matches[0].substring(lastWord.length);
-                                term.write(completion);
+                                terminalInstance.write(completion);
                                 currentLine += completion;
                             }
                         }
@@ -140,7 +146,7 @@ export default function TerminalSimulator() {
                 default: // Type character
                     if (e >= String.fromCharCode(0x20)) {
                         currentLine += e;
-                        term.write(e);
+                        terminalInstance.write(e);
                     }
             }
         });
@@ -151,7 +157,7 @@ export default function TerminalSimulator() {
             window.addEventListener('resize', handleResize);
 
             return () => {
-                term?.dispose();
+                terminalInstance?.dispose();
                 window.removeEventListener('resize', handleResize);
             };
         };
