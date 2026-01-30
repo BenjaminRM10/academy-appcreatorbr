@@ -245,7 +245,7 @@ export default function StudentDashboardClient() {
                         </Link>
                     </Button>
                     <Button variant="ghost" className="justify-start h-auto py-3" asChild>
-                        <Link href="https://discord.gg/appcreatorbr" target="_blank">
+                        <Link href="https://discord.gg/HePq9H7h" target="_blank">
                             <span className="flex-1 text-left">💬 Comunidad Discord</span>
                             <ArrowRight className="h-4 w-4 text-muted-foreground" />
                         </Link>
