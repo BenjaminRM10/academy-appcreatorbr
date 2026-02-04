@@ -12,7 +12,7 @@ export async function submitSupportTicket(formData: {
 
   // Get user
   const { data: { user }, error: authError } = await supabase.auth.getUser()
-  
+
   if (authError || !user) {
     return { error: 'No autorizado. Por favor inicia sesión.' }
   }
@@ -24,7 +24,7 @@ export async function submitSupportTicket(formData: {
       .select('full_name')
       .eq('id', user.id)
       .single()
-    
+
     const userName = profile?.full_name || 'Estudiante'
 
     // Send email via Resend
@@ -35,7 +35,7 @@ export async function submitSupportTicket(formData: {
         Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "Soporte Runa Academy <soporte@appcreatorbr.com>",
+        from: "Soporte Saltillo Academy <soporte@appcreatorbr.com>",
         to: ["contacto@appcreatorbr.com"],
         reply_to: user.email,
         subject: `[Soporte] ${formData.category}: ${formData.subject}`,

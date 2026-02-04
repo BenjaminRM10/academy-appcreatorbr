@@ -4,10 +4,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { 
-  LayoutDashboard, 
-  Users, 
-  CreditCard, 
+import {
+  LayoutDashboard,
+  Users,
+  CreditCard,
   LogOut,
   Settings,
   ShieldAlert
@@ -37,11 +37,11 @@ export function AdminSidebar() {
       <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-14 items-center border-b border-white/10 px-4 lg:h-[60px] lg:px-6 bg-purple-950/30">
           <Link href="/admin/dashboard" className="flex items-center gap-2 font-semibold">
-            <div className="w-9 h-9 rounded-lg overflow-hidden">
-               <img src="/runa-logo.png" alt="Runa Academy" className="w-full h-full object-contain" />
+            <div className="w-9 h-9 rounded-lg overflow-hidden flex items-center justify-center text-2xl">
+              🚀
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              Runa Admin
+              Saltillo Admin
             </span>
           </Link>
         </div>
@@ -56,8 +56,8 @@ export function AdminSidebar() {
                   href={item.href}
                   className={cn(
                     "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-red-400 hover:bg-white/5",
-                    isActive 
-                      ? "bg-red-900/20 text-red-400" 
+                    isActive
+                      ? "bg-red-900/20 text-red-400"
                       : "text-gray-400"
                   )}
                 >
@@ -70,16 +70,16 @@ export function AdminSidebar() {
         </div>
         <div className="mt-auto p-4 border-t border-white/10">
           <div className="mb-4 px-2">
-             <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-2">Accesos Rápidos</p>
-             <Link href="/student/dashboard" className="text-sm text-gray-400 hover:text-white flex items-center gap-2 mb-2">
-                Ver como Estudiante
-             </Link>
-             <Link href="/" className="text-sm text-gray-400 hover:text-white flex items-center gap-2">
-                Ir a Landing Page
-             </Link>
+            <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-2">Accesos Rápidos</p>
+            <Link href="/student/dashboard" className="text-sm text-gray-400 hover:text-white flex items-center gap-2 mb-2">
+              Ver como Estudiante
+            </Link>
+            <Link href="/" className="text-sm text-gray-400 hover:text-white flex items-center gap-2">
+              Ir a Landing Page
+            </Link>
           </div>
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             className="w-full justify-start gap-2 text-red-400 hover:text-red-300 hover:bg-red-950/50"
             onClick={handleLogout}
           >

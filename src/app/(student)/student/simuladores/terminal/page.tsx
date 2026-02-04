@@ -22,11 +22,11 @@ const INITIAL_FS_ROOT = {
 export default function TerminalSimulator() {
     const terminalRef = useRef<HTMLDivElement>(null);
     const xtermRef = useRef<Terminal | null>(null);
-    
+
     // Game State
     const [levelIndex, setLevelIndex] = useState(0);
     const [xp, setXp] = useState(0);
-    
+
     // Persistence
     useEffect(() => {
         const savedLevel = localStorage.getItem('terminal_level');
@@ -39,21 +39,21 @@ export default function TerminalSimulator() {
         localStorage.setItem('terminal_level', levelIndex.toString());
         localStorage.setItem('terminal_xp', xp.toString());
     }, [levelIndex, xp]);
-    
+
     // Safety check for level
     const currentLevel = LEVELS[levelIndex] || LEVELS[LEVELS.length - 1];
 
     // Simulation State (Using Refs for synchronous access in event handlers)
     const fsRef = useRef({ root: JSON.parse(JSON.stringify(INITIAL_FS_ROOT)), cwd: '/' });
     const historyRef = useRef<string[]>([]);
-    
+
     // Helper to get current directory object from path string
     const getDirFromPath = (path: string) => {
         if (path === '/') return fsRef.current.root;
-        
+
         const parts = path.split('/').filter(Boolean);
         let current = fsRef.current.root;
-        
+
         for (const part of parts) {
             if (current.children && current.children[part]) {
                 current = current.children[part];
@@ -90,7 +90,7 @@ export default function TerminalSimulator() {
             fitAddon = new FitAddon();
             term.loadAddon(fitAddon);
             term.open(terminalRef.current!);
-            
+
             // Fix for dimensions error: wait for next tick
             setTimeout(() => {
                 try {
@@ -104,7 +104,7 @@ export default function TerminalSimulator() {
             if (!term) return;
 
             // Welcome Message
-            term.writeln('\x1b[1;36m~ Runa Academy Terminal v2.0 ~\x1b[0m');
+            term.writeln('\x1b[1;36m~ Saltillo Academy Terminal v2.0 ~\x1b[0m');
             term.writeln('Sistema listo. Escribe "help" para ver comandos.');
             term.writeln('');
             prompt(term);
@@ -115,44 +115,44 @@ export default function TerminalSimulator() {
             const terminalInstance = term;
 
             terminalInstance.onData(e => {
-            switch (e) {
-                case '\r': // Enter
-                    terminalInstance.write('\r\n');
-                    handleCommand(currentLine.trim(), terminalInstance);
-                    currentLine = '';
-                    break;
-                case '\u007F': // Backspace
-                    if (currentLine.length > 0) {
-                        terminalInstance.write('\b \b');
-                        currentLine = currentLine.substring(0, currentLine.length - 1);
-                    }
-                    break;
-                case '\t': // Tab (Autocomplete)
-                    // Simple autocomplete logic
-                    const parts = currentLine.split(' ');
-                    const lastWord = parts[parts.length - 1];
-                    if (lastWord) {
-                        const currentDirObj = getDirFromPath(fsRef.current.cwd);
-                        if (currentDirObj) {
-                            const matches = Object.keys(currentDirObj.children).filter(name => name.startsWith(lastWord));
-                            if (matches.length === 1) {
-                                const completion = matches[0].substring(lastWord.length);
-                                terminalInstance.write(completion);
-                                currentLine += completion;
+                switch (e) {
+                    case '\r': // Enter
+                        terminalInstance.write('\r\n');
+                        handleCommand(currentLine.trim(), terminalInstance);
+                        currentLine = '';
+                        break;
+                    case '\u007F': // Backspace
+                        if (currentLine.length > 0) {
+                            terminalInstance.write('\b \b');
+                            currentLine = currentLine.substring(0, currentLine.length - 1);
+                        }
+                        break;
+                    case '\t': // Tab (Autocomplete)
+                        // Simple autocomplete logic
+                        const parts = currentLine.split(' ');
+                        const lastWord = parts[parts.length - 1];
+                        if (lastWord) {
+                            const currentDirObj = getDirFromPath(fsRef.current.cwd);
+                            if (currentDirObj) {
+                                const matches = Object.keys(currentDirObj.children).filter(name => name.startsWith(lastWord));
+                                if (matches.length === 1) {
+                                    const completion = matches[0].substring(lastWord.length);
+                                    terminalInstance.write(completion);
+                                    currentLine += completion;
+                                }
                             }
                         }
-                    }
-                    break;
-                default: // Type character
-                    if (e >= String.fromCharCode(0x20)) {
-                        currentLine += e;
-                        terminalInstance.write(e);
-                    }
-            }
-        });
+                        break;
+                    default: // Type character
+                        if (e >= String.fromCharCode(0x20)) {
+                            currentLine += e;
+                            terminalInstance.write(e);
+                        }
+                }
+            });
 
             const handleResize = () => {
-                try { fitAddon!.fit(); } catch(e) {}
+                try { fitAddon!.fit(); } catch (e) { }
             };
             window.addEventListener('resize', handleResize);
 
@@ -172,7 +172,7 @@ export default function TerminalSimulator() {
         return () => {
             // Cleanup will be handled by the async init
         };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // --- COMMAND HANDLER ---
@@ -337,14 +337,14 @@ export default function TerminalSimulator() {
         // We use the Ref current state which is always up to date
         // Safety check if level exists
         const currentLvl = LEVELS[levelIndex] || LEVELS[LEVELS.length - 1];
-        
+
         if (currentLvl.check(historyRef.current, fsRef.current)) {
             toast({
                 title: "¡Nivel Completado!",
                 description: `Has ganado ${currentLvl.xp} XP.`
             });
             setXp(prev => prev + currentLvl.xp);
-            
+
             if (levelIndex < LEVELS.length - 1) {
                 // Immediate transition
                 setLevelIndex(prev => prev + 1);
@@ -412,7 +412,7 @@ export default function TerminalSimulator() {
                 <Card className="p-4 bg-muted/20">
                     <h3 className="font-semibold text-sm mb-2">Progreso</h3>
                     <div className="h-2 w-full bg-secondary rounded-full overflow-hidden">
-                        <div 
+                        <div
                             className="h-full bg-gradient-to-r from-purple-500 to-cyan-500 transition-all duration-500"
                             style={{ width: `${((levelIndex) / LEVELS.length) * 100}%` }}
                         />

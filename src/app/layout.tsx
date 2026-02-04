@@ -15,15 +15,15 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Runa Academy | Ingeniería Asistida por IA",
-  description: "Aprende a construir productos con IA. Curso intensivo de Next.js, Supabase y herramientas de inteligencia artificial para ingenieros.",
-  keywords: ["cursos IA", "Next.js", "Supabase", "automatización", "ingeniería", "programación", "inteligencia artificial"],
-  authors: [{ name: "Runa Academy" }],
+  title: "Saltillo Academy | Ingeniería Asistida por IA",
+  description: "Aprende a usar IA para crear aplicaciones reales. Cursos prácticos de Google Antigravity, Claude Code, Python y más.",
+  keywords: ["IA", "Inteligencia Artificial", "Programación", "Saltillo", "Cursos", "Ingeniería"],
+  authors: [{ name: "Saltillo Academy" }],
   openGraph: {
-    title: "Runa Academy | Ingeniería Asistida por IA",
-    description: "Aprende a construir productos con IA. Curso intensivo de Next.js, Supabase y herramientas de inteligencia artificial.",
+    title: "Saltillo Academy | Ingeniería Asistida por IA",
+    description: "Aprende a usar IA para crear aplicaciones reales. Cursos prácticos de Google Antigravity, Claude Code, Python y más.",
     url: "https://academy.appcreatorbr.com",
-    siteName: "Runa Academy",
+    siteName: "Saltillo Academy",
     locale: "es_MX",
     type: "website",
   },

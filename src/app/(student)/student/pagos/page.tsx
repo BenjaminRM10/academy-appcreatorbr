@@ -32,35 +32,35 @@ export default async function HistorialPagosPage() {
 
       <Card>
         <Table>
-            <TableHeader>
-                <TableRow>
-                    <TableHead>Fecha</TableHead>
-                    <TableHead>Concepto</TableHead>
-                    <TableHead>Monto</TableHead>
-                    <TableHead>Estado</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {enrollments?.map((item: any, i: number) => (
-                    <TableRow key={i}>
-                        <TableCell>
-                            {format(new Date(item.created_at), "d 'de' MMMM, yyyy", { locale: es })}
-                        </TableCell>
-                        <TableCell>{item.courses?.name || 'Curso Runa Academy'}</TableCell>
-                        <TableCell>${(item.courses?.price || 80000) / 100} MXN</TableCell>
-                        <TableCell>
-                            <Badge variant={item.payment_status === 'paid' ? 'default' : 'secondary'}>
-                                {item.payment_status === 'paid' ? 'Pagado' : 'Pendiente'}
-                            </Badge>
-                        </TableCell>
-                    </TableRow>
-                ))}
-                {!enrollments?.length && (
-                    <TableRow>
-                        <TableCell colSpan={4} className="text-center h-24">No hay historial.</TableCell>
-                    </TableRow>
-                )}
-            </TableBody>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Fecha</TableHead>
+              <TableHead>Concepto</TableHead>
+              <TableHead>Monto</TableHead>
+              <TableHead>Estado</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {enrollments?.map((item: any, i: number) => (
+              <TableRow key={i}>
+                <TableCell>
+                  {format(new Date(item.created_at), "d 'de' MMMM, yyyy", { locale: es })}
+                </TableCell>
+                <TableCell>{item.courses?.name || 'Curso Saltillo Academy'}</TableCell>
+                <TableCell>${(item.courses?.price || 80000) / 100} MXN</TableCell>
+                <TableCell>
+                  <Badge variant={item.payment_status === 'paid' ? 'default' : 'secondary'}>
+                    {item.payment_status === 'paid' ? 'Pagado' : 'Pendiente'}
+                  </Badge>
+                </TableCell>
+              </TableRow>
+            ))}
+            {!enrollments?.length && (
+              <TableRow>
+                <TableCell colSpan={4} className="text-center h-24">No hay historial.</TableCell>
+              </TableRow>
+            )}
+          </TableBody>
         </Table>
       </Card>
     </div>

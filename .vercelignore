@@ -1,0 +1,16 @@
+# Ignorar archivos innecesarios en deployment
+*.md
+README.md
+.vscode
+.idea
+.DS_Store
+*.log
+test/
+tests/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+.env.example
+.git
+.github

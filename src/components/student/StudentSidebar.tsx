@@ -4,13 +4,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { 
-  LayoutDashboard, 
-  BookOpen, 
-  Video, 
-  Gamepad2, 
-  CreditCard, 
-  User, 
+import {
+  LayoutDashboard,
+  BookOpen,
+  Video,
+  Gamepad2,
+  CreditCard,
+  User,
   LogOut,
   Hexagon
 } from 'lucide-react';
@@ -41,11 +41,11 @@ export function StudentSidebar() {
       <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
           <Link href="/student/dashboard" className="flex items-center gap-2 font-semibold">
-            <div className="w-8 h-8 rounded-lg overflow-hidden">
-                <img src="/runa-logo.png" alt="Runa Academy" className="w-full h-full object-contain" />
+            <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center text-2xl">
+              🚀
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              Runa Academy
+              Saltillo Academy
             </span>
           </Link>
         </div>
@@ -60,8 +60,8 @@ export function StudentSidebar() {
                   href={item.href}
                   className={cn(
                     "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary",
-                    isActive 
-                      ? "bg-muted text-primary" 
+                    isActive
+                      ? "bg-muted text-primary"
                       : "text-muted-foreground"
                   )}
                 >
@@ -73,8 +73,8 @@ export function StudentSidebar() {
           </nav>
         </div>
         <div className="mt-auto p-4">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="w-full justify-start gap-2 text-muted-foreground hover:text-foreground"
             onClick={handleLogout}
           >
