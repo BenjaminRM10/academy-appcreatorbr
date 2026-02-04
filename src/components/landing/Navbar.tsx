@@ -14,7 +14,7 @@ export function Navbar() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 md:gap-3 group">
           <div className="relative w-8 h-8 md:w-10 md:h-10 rounded-xl overflow-hidden group-hover:scale-105 transition-transform duration-300 shadow-lg shadow-purple-500/20">
-             <Image src="/runa-logo.png" alt="Runa Academy" width={40} height={40} className="object-contain" />
+            <Image src="/runa-logo.png" alt="Runa Academy" width={40} height={40} className="object-contain" />
           </div>
           <span className="font-bold text-lg md:text-xl tracking-tight group-hover:text-cyan-100 transition-colors">
             Runa<span className="text-cyan-400">Academy</span>
@@ -23,13 +23,13 @@ export function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
-          <Link href="#cursos" className="hover:text-cyan-400 transition-colors">
+          <Link href="/#cursos" className="hover:text-cyan-400 transition-colors">
             Cursos
           </Link>
-          <Link href="#metodologia" className="hover:text-purple-400 transition-colors">
+          <Link href="/#metodologia" className="hover:text-purple-400 transition-colors">
             Metodología
           </Link>
-          <Link href="#precios" className="hover:text-cyan-400 transition-colors">
+          <Link href="/#precios" className="hover:text-cyan-400 transition-colors">
             Precios
           </Link>
         </div>
@@ -62,22 +62,22 @@ export function Navbar() {
       {mobileMenuOpen && (
         <div className="md:hidden glass border-t border-white/5 animate-in slide-in-from-top-2 duration-200">
           <div className="container mx-auto px-4 py-4 space-y-4">
-            <Link 
-              href="#cursos" 
+            <Link
+              href="/#cursos"
               className="block py-2 text-gray-300 hover:text-cyan-400 transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               Cursos
             </Link>
-            <Link 
-              href="#metodologia" 
+            <Link
+              href="/#metodologia"
               className="block py-2 text-gray-300 hover:text-purple-400 transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               Metodología
             </Link>
-            <Link 
-              href="#precios" 
+            <Link
+              href="/#precios"
               className="block py-2 text-gray-300 hover:text-cyan-400 transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >

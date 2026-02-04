@@ -2,6 +2,7 @@ import { Metadata } from "next"
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { RegistroForm } from "./registro-form"
+import { WhatsAppButton } from "@/components/WhatsAppButton"
 
 export const metadata: Metadata = {
   title: "Completa tu Registro | Academy AppCreatorBR",
@@ -60,7 +61,7 @@ export default async function RegistroPage() {
     <div className="container relative min-h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="relative hidden h-full flex-col bg-muted p-12 text-white dark:border-r lg:flex justify-center">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 via-zinc-900 to-cyan-950" />
-        
+
         {/* Logo */}
         <div className="absolute top-8 left-12 z-20 flex items-center text-lg font-medium">
           <svg
@@ -77,7 +78,7 @@ export default async function RegistroPage() {
           </svg>
           Academy AppCreatorBR
         </div>
-        
+
         {/* Main Content - Centered */}
         <div className="relative z-20">
           <h2 className="text-3xl font-bold mb-4">
@@ -87,7 +88,7 @@ export default async function RegistroPage() {
             Estás a un paso de unirte a la<br />
             <span className="text-cyan-400 font-semibold">Escuela de Ingeniería y Tecnología 4.0</span>
           </p>
-          
+
           <div className="space-y-5">
             <p className="text-base text-zinc-400 font-medium mb-4">Pasos para inscribirte:</p>
             <div className="flex items-center gap-4">
@@ -117,7 +118,7 @@ export default async function RegistroPage() {
           </div>
         </div>
       </div>
-      
+
       {/* Mobile Welcome Banner */}
       <div className="lg:hidden w-full bg-gradient-to-b from-zinc-900 to-cyan-950 text-white p-6 text-center">
         <h2 className="text-2xl font-bold mb-2">¡Bienvenido! 🚀</h2>
@@ -133,11 +134,11 @@ export default async function RegistroPage() {
               Completa tu Registro
             </h1>
             <p className="text-sm text-muted-foreground">
-              Hola <span className="font-medium">{userName || userEmail}</span>, 
+              Hola <span className="font-medium">{userName || userEmail}</span>,
               ingresa tus datos para inscribirte
             </p>
           </div>
-          
+
           <RegistroForm
             courses={courses || []}
             groups={groups || []}
@@ -151,6 +152,11 @@ export default async function RegistroPage() {
           </p>
         </div>
       </div>
+
+      <WhatsAppButton
+        message="Hola, estoy en el proceso de registro y tengo algunas dudas que me gustaría aclarar antes de continuar"
+        tooltipText="¿Dudas con el registro? Escríbenos"
+      />
     </div>
   )
 }

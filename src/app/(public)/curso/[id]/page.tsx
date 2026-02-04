@@ -10,159 +10,258 @@ import { Footer } from '@/components/landing/Footer';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+    params: Promise<{ id: string }>;
 }
 
 export default async function PublicCourseDetailPage({ params }: PageProps) {
-  const { id } = await params;
-  
-  // Try to find course by ID (1, 2, etc.) or assume it maps to our syllabus number
-  // The CourseGrid passes IDs like 1, 2, 8.
-  const courseNumber = parseInt(id);
-  const syllabus = SYLLABUS_DATA[courseNumber];
+    const { id } = await params;
 
-  if (!syllabus) {
-    return (
-      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4">
-        <h1 className="text-2xl font-bold mb-4">Curso no encontrado</h1>
-        <Button asChild variant="secondary">
-            <Link href="/">Volver al Inicio</Link>
-        </Button>
-      </div>
-    );
-  }
+    // Try to find course by ID (1, 2, etc.) or assume it maps to our syllabus number
+    // The CourseGrid passes IDs like 1, 2, 8.
+    const courseNumber = parseInt(id);
+    const syllabus = SYLLABUS_DATA[courseNumber];
 
-  // Construct image path based on ID (assuming convention course-X.jpg)
-  const imagePath = `/courses/course-${courseNumber}.jpg`;
-
-  return (
-    <div className="min-h-screen bg-black text-white selection:bg-cyan-500/30">
-      <Navbar />
-      
-      <main className="container mx-auto px-4 py-20 md:py-24 lg:py-32">
-        {/* Back Link */}
-        <Link href="/#cursos" className="inline-flex items-center text-sm text-gray-400 hover:text-cyan-400 mb-6 md:mb-8 transition-colors">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Volver a Cursos
-        </Link>
-
-        <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
-            {/* Left Column: Info & Syllabus */}
-            <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
-                <div className="space-y-3 md:space-y-4">
-                    <div className="flex gap-2 flex-wrap">
-                         <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 bg-cyan-500/10 text-xs">
-                            Curso {syllabus.number}
-                        </Badge>
-                        <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10 text-xs">
-                            4 Semanas
-                        </Badge>
-                    </div>
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                        {syllabus.title}
-                    </h1>
-                    <p className="text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed">
-                        {syllabus.description}
-                    </p>
-                </div>
-
-                <div className="flex flex-wrap gap-3 md:gap-4 text-xs md:text-sm text-gray-400">
-                    <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
-                        <Calendar className="h-3 w-3 md:h-4 md:w-4 text-cyan-500" />
-                        <span>Inicia: 16 Feb 2026</span>
-                    </div>
-                    <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
-                        <Clock className="h-3 w-3 md:h-4 md:w-4 text-purple-500" />
-                        <span className="text-xs md:text-sm">Lun, Mié, Vie (19:00 - 21:00)</span>
-                    </div>
-                </div>
-
-                <div className="space-y-4 md:space-y-6 pt-6 md:pt-8">
-                    <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
-                        <span className="w-1 h-6 md:h-8 bg-cyan-500 rounded-full"></span>
-                        Plan de Estudios
-                    </h2>
-                    
-                    <div className="grid gap-3 md:gap-4">
-                        {syllabus.weeks.map((week, index) => (
-                            <div key={index} className="bg-white/5 border border-white/10 rounded-xl p-4 md:p-6 hover:border-cyan-500/30 transition-colors">
-                                <h3 className="text-base md:text-lg font-semibold text-cyan-100 mb-2 md:mb-3">
-                                    {week.title}
-                                </h3>
-                                <ul className="space-y-2">
-                                    {week.topics.map((topic, i) => (
-                                        <li key={i} className="flex items-start gap-2 md:gap-3 text-xs md:text-sm text-gray-400">
-                                            <CheckCircle2 className="h-3 w-3 md:h-4 md:w-4 shrink-0 text-cyan-500 mt-0.5" />
-                                            <span>{topic}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+    if (!syllabus) {
+        return (
+            <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4">
+                <h1 className="text-2xl font-bold mb-4">Curso no encontrado</h1>
+                <Button asChild variant="secondary">
+                    <Link href="/">Volver al Inicio</Link>
+                </Button>
             </div>
+        );
+    }
 
-            {/* Right Column: Sticky Card & Actions */}
-            <div className="lg:sticky lg:top-32 space-y-6 md:space-y-8 animate-in fade-in slide-in-from-right-8 duration-700 delay-200">
-                <div className="relative aspect-video w-full overflow-hidden rounded-xl md:rounded-2xl border border-white/10 shadow-2xl shadow-cyan-900/20">
-                    <Image
-                        src={imagePath}
-                        alt={syllabus.title}
-                        fill
-                        className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                </div>
+    // Construct image path based on ID (assuming convention course-X.jpg)
+    const imagePath = `/courses/course-${courseNumber}.jpg`;
 
-                <Card className="bg-gray-900/80 border-cyan-500/30 backdrop-blur-sm">
-                    <CardHeader className="pb-4">
-                        <CardTitle className="text-xl md:text-2xl">Inscríbete Ahora</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4 md:space-y-6">
-                        <div className="space-y-2">
-                            <div className="flex items-end gap-2">
-                                <span className="text-3xl md:text-4xl font-bold text-white">$800</span>
-                                <span className="text-lg md:text-xl text-gray-400 mb-1">MXN / mes</span>
+    return (
+        <div className="min-h-screen bg-black text-white selection:bg-cyan-500/30">
+            <Navbar />
+
+            <main className="container mx-auto px-4 py-20 md:py-24 lg:py-32">
+                {/* Back Link */}
+                <Link href="/#cursos" className="inline-flex items-center text-sm text-gray-400 hover:text-cyan-400 mb-6 md:mb-8 transition-colors">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Volver a Cursos
+                </Link>
+
+                <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
+                    {/* Left Column: Info & Syllabus */}
+                    <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
+                        <div className="space-y-3 md:space-y-4">
+                            <div className="flex gap-2 flex-wrap">
+                                <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 bg-cyan-500/10 text-xs">
+                                    Curso {syllabus.number}
+                                </Badge>
+                                <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10 text-xs">
+                                    4 Semanas
+                                </Badge>
                             </div>
-                            <p className="text-xs md:text-sm text-gray-400">Acceso completo a clases en vivo, grabaciones y comunidad.</p>
-                        </div>
-
-                        <div className="space-y-3">
-                             {syllabus.number === 1 ? (
-                                <Button size="lg" className="w-full h-11 md:h-12 text-sm md:text-base bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold shadow-lg shadow-cyan-500/25" asChild>
-                                    <Link href="/registro">
-                                        Registrarme al Curso <ArrowRight className="ml-2 h-3 w-3 md:h-4 md:w-4" />
-                                    </Link>
-                                </Button>
-                             ) : (
-                                <Button size="lg" disabled className="w-full h-11 md:h-12 text-sm md:text-base bg-gray-700 text-gray-400 cursor-not-allowed border border-gray-600">
-                                    Inscripciones Cerradas <span className="ml-2 text-xs opacity-70">(Próximamente)</span>
-                                </Button>
-                             )}
-                            <p className="text-xs text-center text-gray-500">
-                                Garantía de satisfacción de 7 días.
+                            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+                                {syllabus.title}
+                            </h1>
+                            <p className="text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed">
+                                {syllabus.description}
                             </p>
                         </div>
 
-                        <div className="pt-3 md:pt-4 border-t border-white/10 space-y-3 md:space-y-4">
-                            <div>
-                                <h4 className="font-semibold text-white mb-1 text-sm md:text-base">¿Para quién es?</h4>
-                                <p className="text-xs md:text-sm text-gray-400">{syllabus.targetAudience}</p>
+                        <div className="flex flex-wrap gap-3 md:gap-4 text-xs md:text-sm text-gray-400">
+                            <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+                                <Calendar className="h-3 w-3 md:h-4 md:w-4 text-cyan-500" />
+                                <span>Inicia: 16 Feb 2026</span>
                             </div>
-                            <div>
-                                <h4 className="font-semibold text-white mb-1 text-sm md:text-base">Meta del Curso</h4>
-                                <p className="text-xs md:text-sm text-gray-400">{syllabus.goal}</p>
+                            <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+                                <Clock className="h-3 w-3 md:h-4 md:w-4 text-purple-500" />
+                                <span className="text-xs md:text-sm">Lun, Mié, Vie (19:00 - 21:00)</span>
                             </div>
                         </div>
-                    </CardContent>
-                </Card>
-            </div>
-        </div>
-      </main>
 
-      <Footer />
-      <WhatsAppButton />
-    </div>
-  );
+                        <div className="space-y-4 md:space-y-6 pt-6 md:pt-8">
+                            <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
+                                <span className="w-1 h-6 md:h-8 bg-cyan-500 rounded-full"></span>
+                                Plan de Estudios
+                            </h2>
+
+                            <div className="grid gap-3 md:gap-4">
+                                {syllabus.weeks.map((week, index) => (
+                                    <div key={index} className="bg-white/5 border border-white/10 rounded-xl p-4 md:p-6 hover:border-cyan-500/30 transition-colors">
+                                        <h3 className="text-base md:text-lg font-semibold text-cyan-100 mb-2 md:mb-3">
+                                            {week.title}
+                                        </h3>
+                                        <ul className="space-y-2">
+                                            {week.topics.map((topic, i) => (
+                                                <li key={i} className="flex items-start gap-2 md:gap-3 text-xs md:text-sm text-gray-400">
+                                                    <CheckCircle2 className="h-3 w-3 md:h-4 md:w-4 shrink-0 text-cyan-500 mt-0.5" />
+                                                    <span>{topic}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* CURSO 1 ONLY: Additional Info Sections */}
+                        {syllabus.number === 1 && (
+                            <>
+                                {/* Herramientas */}
+                                <div className="space-y-4 md:space-y-6 pt-6 md:pt-8 border-t border-white/10">
+                                    <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
+                                        <span className="w-1 h-6 md:h-8 bg-purple-500 rounded-full"></span>
+                                        Herramientas que Aprenderás
+                                    </h2>
+                                    <div className="grid md:grid-cols-2 gap-3">
+                                        {[
+                                            { name: 'Google Antigravity', desc: 'Asistente de programación AI-powered' },
+                                            { name: 'Claude Code', desc: 'IA para desarrollo de código' },
+                                            { name: 'NotebookLM', desc: 'Estudiar y aprender con IA' },
+                                            { name: 'MCP Servers', desc: 'Integración de herramientas con IA' },
+                                            { name: 'APIs de IA (Gemini)', desc: 'Conectar tu código con IA' },
+                                            { name: 'Excel con IA', desc: 'Aumenta tu eficiencia' },
+                                            { name: 'Python', desc: 'Scripting y automatización' },
+                                            { name: 'Git & GitHub', desc: 'Control de versiones' },
+                                            { name: 'Terminal', desc: 'Linux, Windows y Mac' },
+                                            { name: 'Prompting', desc: 'Comunicación efectiva con IA' },
+                                        ].map((tool, i) => (
+                                            <div key={i} className="bg-gradient-to-br from-purple-900/20 to-cyan-900/20 border border-purple-500/30 rounded-lg p-4 hover:border-cyan-500/50 transition-colors">
+                                                <h4 className="font-bold text-sm md:text-base text-purple-200 mb-1">{tool.name}</h4>
+                                                <p className="text-xs text-gray-400">{tool.desc}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Metodología & Proyecto */}
+                                <div className="space-y-4 md:space-y-6 pt-6 md:pt-8 border-t border-white/10">
+                                    <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
+                                        <span className="w-1 h-6 md:h-8 bg-green-500 rounded-full"></span>
+                                        Metodología y Proyecto
+                                    </h2>
+
+                                    <div className="bg-gradient-to-r from-green-900/20 to-cyan-900/20 border border-green-500/30 rounded-xl p-6">
+                                        <h3 className="font-bold text-lg mb-3 text-green-200">🎯 Metodología Project-Based</h3>
+                                        <ul className="space-y-2 text-sm text-gray-300">
+                                            <li className="flex items-start gap-2">
+                                                <CheckCircle2 className="h-4 w-4 text-green-400 shrink-0 mt-0.5" />
+                                                <span><strong>Visual:</strong> Simuladores interactivos para aprender haciendo</span>
+                                            </li>
+                                            <li className="flex items-start gap-2">
+                                                <CheckCircle2 className="h-4 w-4 text-green-400 shrink-0 mt-0.5" />
+                                                <span><strong>Práctica:</strong> Ejercicios hands-on en cada sesión</span>
+                                            </li>
+                                            <li className="flex items-start gap-2">
+                                                <CheckCircle2 className="h-4 w-4 text-green-400 shrink-0 mt-0.5" />
+                                                <span><strong>Project-Based:</strong> Construyes un proyecto real desde día 1</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div className="bg-gradient-to-r from-yellow-900/20 to-orange-900/20 border border-yellow-500/30 rounded-xl p-6">
+                                        <h3 className="font-bold text-lg mb-3 text-yellow-200">🚀 Proyecto Final: App Terminal AI</h3>
+                                        <p className="text-sm text-gray-300 mb-3">
+                                            Durante todo el mes trabajarás en tu propia aplicación de terminal powered by AI que puede hacer lo que quieras.
+                                        </p>
+                                        <div className="bg-black/30 border border-yellow-600/30 rounded-lg p-4">
+                                            <p className="text-xs font-mono text-yellow-200 mb-2">📱 Ejemplo de proyecto recomendado:</p>
+                                            <p className="text-sm text-gray-300">
+                                                <strong>"Arduino Programmer AI"</strong> - Una app que programa Arduino usando lenguaje natural.
+                                            </p>
+                                            <p className="text-xs text-gray-400 mt-2">
+                                                Funciona en Linux, Windows o Mac terminal. Tú decides qué construir.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Horarios Disponibles */}
+                                <div className="space-y-4 md:space-y-6 pt-6 md:pt-8 border-t border-white/10">
+                                    <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
+                                        <span className="w-1 h-6 md:h-8 bg-cyan-500 rounded-full"></span>
+                                        Horarios Disponibles (Elige 1)
+                                    </h2>
+                                    <div className="grid md:grid-cols-2 gap-3">
+                                        {[
+                                            { days: 'Lun, Mié, Vie', time: '9:00 - 11:00 AM' },
+                                            { days: 'Lun, Mié, Vie', time: '7:00 - 9:00 PM' },
+                                            { days: 'Mar, Jue, Sáb', time: '9:00 - 11:00 AM' },
+                                            { days: 'Mar, Jue, Sáb', time: '7:00 - 9:00 PM' },
+                                        ].map((schedule, i) => (
+                                            <div key={i} className="bg-cyan-900/20 border border-cyan-500/30 rounded-lg p-4 hover:border-cyan-400 hover:bg-cyan-900/30 transition-colors">
+                                                <p className="font-bold text-cyan-200 text-sm md:text-base">{schedule.days}</p>
+                                                <p className="text-lg font-mono text-white">{schedule.time}</p>
+                                                <p className="text-xs text-gray-400 mt-1">Hora de México (CST)</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <p className="text-xs text-gray-400 text-center">
+                                        Cada sesión es de 2 horas. 12 sesiones totales = 24 horas de clase en vivo.
+                                    </p>
+                                </div>
+                            </>
+                        )}
+                    </div>
+
+                    {/* Right Column: Sticky Card & Actions */}
+                    <div className="lg:sticky lg:top-32 space-y-6 md:space-y-8 animate-in fade-in slide-in-from-right-8 duration-700 delay-200">
+                        <div className="relative aspect-video w-full overflow-hidden rounded-xl md:rounded-2xl border border-white/10 shadow-2xl shadow-cyan-900/20">
+                            <Image
+                                src={imagePath}
+                                alt={syllabus.title}
+                                fill
+                                className="object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                        </div>
+
+                        <Card className="bg-gray-900/80 border-cyan-500/30 backdrop-blur-sm">
+                            <CardHeader className="pb-4">
+                                <CardTitle className="text-xl md:text-2xl">Inscríbete Ahora</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-4 md:space-y-6">
+                                <div className="space-y-2">
+                                    <div className="flex items-end gap-2">
+                                        <span className="text-3xl md:text-4xl font-bold text-white">$800</span>
+                                        <span className="text-lg md:text-xl text-gray-400 mb-1">MXN / mes</span>
+                                    </div>
+                                    <p className="text-xs md:text-sm text-gray-400">Acceso completo a clases en vivo, grabaciones y comunidad.</p>
+                                </div>
+
+                                <div className="space-y-3">
+                                    {syllabus.number === 1 ? (
+                                        <Button size="lg" className="w-full h-11 md:h-12 text-sm md:text-base bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold shadow-lg shadow-cyan-500/25" asChild>
+                                            <Link href="/registro">
+                                                Registrarme al Curso <ArrowRight className="ml-2 h-3 w-3 md:h-4 md:w-4" />
+                                            </Link>
+                                        </Button>
+                                    ) : (
+                                        <Button size="lg" disabled className="w-full h-11 md:h-12 text-sm md:text-base bg-gray-700 text-gray-400 cursor-not-allowed border border-gray-600">
+                                            Inscripciones Cerradas <span className="ml-2 text-xs opacity-70">(Próximamente)</span>
+                                        </Button>
+                                    )}
+                                    <p className="text-xs text-center text-gray-500">
+                                        Garantía de satisfacción de 7 días.
+                                    </p>
+                                </div>
+
+                                <div className="pt-3 md:pt-4 border-t border-white/10 space-y-3 md:space-y-4">
+                                    <div>
+                                        <h4 className="font-semibold text-white mb-1 text-sm md:text-base">¿Para quién es?</h4>
+                                        <p className="text-xs md:text-sm text-gray-400">{syllabus.targetAudience}</p>
+                                    </div>
+                                    <div>
+                                        <h4 className="font-semibold text-white mb-1 text-sm md:text-base">Meta del Curso</h4>
+                                        <p className="text-xs md:text-sm text-gray-400">{syllabus.goal}</p>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
+            </main>
+
+            <Footer />
+            <WhatsAppButton />
+        </div>
+    );
 }

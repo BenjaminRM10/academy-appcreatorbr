@@ -18,40 +18,44 @@ export const SYLLABUS_DATA: Record<number, CourseSyllabus> = {
     id: "course-1",
     number: 1,
     title: "Ingeniería Asistida por IA (Fundamentos)",
-    description: "Domina tu computadora y deja de hacer tareas repetitivas.",
-    targetAudience: "Para quien quiere dominar su computadora y dejar de hacer tareas repetitivas.",
-    goal: "Convertirte en un \"Power User\" que usa la IA para controlar Windows, la Terminal y VS Code.",
+    description: "Aprende a usar las herramientas más modernas de IA para crear lo que quieras. Domina Google Antigravity, Claude Code, MCP Servers y crea tu propia aplicación de terminal powered by AI que puede programar Arduino con lenguaje natural.",
+    targetAudience: "Cualquier persona que quiera dominar las herramientas de IA más avanzadas para aumentar su productividad y crear proyectos reales. No se requiere experiencia previa en programación.",
+    goal: "Convertirte en un creador tecnológico capaz de usar IA para automatizar tareas, crear aplicaciones y aprovechar las herramientas más modernas del mercado.",
     weeks: [
       {
-        title: "Semana 1: El Despertar (Setup & OS)",
+        title: "Semana 1: El Despertar (Setup & Herramientas Base)",
         topics: [
-          "Fundamentos & Diagnóstico (AI Driven): Entender tu PC (CPU/RAM).",
-          "WSL & Terminal: Instalación de Linux en Windows.",
-          "Prompt Engineering Técnico: Hablarle a la IA como Ingeniero."
+          "NotebookLM: Cómo estudiar y aprender con IA de forma efectiva.",
+          "Fundamentos & Diagnóstico: Entender tu PC (CPU/RAM/Disco) con ayuda de IA.",
+          "Terminal: Comandos básicos en Linux, Windows y Mac.",
+          "Prompting Engineering: Hablarle a la IA como un profesional."
         ]
       },
       {
-        title: "Semana 2: Herramientas del Oficio",
+        title: "Semana 2: Herramientas Modernas de Desarrollo",
         topics: [
-          "VS Code + Claude Code: Tu entorno de desarrollo.",
-          "Git & Github: Guardar tu trabajo en la nube.",
-          "Inglés Técnico: Aprender a leer errores."
+          "Google Antigravity & Claude Code: Tu asistente de programación AI-powered.",
+          "Git & GitHub: Guardar y versionar tu trabajo en la nube.",
+          "Excel con IA: Automatizar análisis y aumentar tu eficiencia con MCP Servers.",
+          "Inglés Técnico: Aprender a leer errores y documentación."
         ]
       },
       {
-        title: "Semana 3: Automatización Local",
+        title: "Semana 3: Programación y APIs",
         topics: [
-          "Python Scripting I: Lógica básica.",
-          "Python Scripting II: Automatizar carpetas y archivos.",
-          "APIs Básicas: Conectar tu PC a internet."
+          "Python Scripting: Lógica básica y automatización de tareas.",
+          "APIs de IA (Gemini): Conectar tu código con inteligencia artificial.",
+          "MCP Servers: Integrar herramientas y servicios con IA.",
+          "Proyecto Inicial: Configurar tu aplicación de terminal."
         ]
       },
       {
-        title: "Semana 4: Cierre",
+        title: "Semana 4: Proyecto Final",
         topics: [
-          "Claude Code Avanzado: Refactorización.",
-          "Taller de CLI Tools: Tu propia herramienta.",
-          "Proyecto Final: \"El Asistente Supremo\"."
+          "Desarrollo del Proyecto: App de Terminal powered by AI.",
+          "Caso de uso: Programar Arduino con lenguaje natural.",
+          "Sesión de Prompting Avanzado: Optimiza tus resultados.",
+          "Presentación Final: Tu Asistente Supremo funcionando."
         ]
       }
     ]
@@ -125,7 +129,7 @@ export const SYLLABUS_DATA: Record<number, CourseSyllabus> = {
       }
     ]
   },
-   7: {
+  7: {
     id: "course-7",
     number: 7,
     title: "Desarrollo Web Full Stack con IA",
@@ -184,11 +188,11 @@ export function getSyllabusByCourseId(courseId: string, courseNumber?: number): 
   if (courseNumber && SYLLABUS_DATA[courseNumber]) {
     return SYLLABUS_DATA[courseNumber];
   }
-  
+
   // Otherwise try to find by ID or similar matching (fallback logic)
   // For now, let's assume courseId might be UUID but we might pass number in a query param or just find matching title?
   // Since we are mocking, let's just return Course 1 if nothing matches strictly, or improve mapping.
-  
+
   const found = Object.values(SYLLABUS_DATA).find(c => c.id === courseId);
   if (found) return found;
 

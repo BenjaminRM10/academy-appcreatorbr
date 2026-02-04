@@ -41,7 +41,7 @@ export async function updateSession(request: NextRequest) {
 
   // Protected routes - require authentication
   if (
-    pathname.startsWith('/student') || 
+    pathname.startsWith('/student') ||
     pathname.startsWith('/admin')
   ) {
     if (!user) {
@@ -51,16 +51,16 @@ export async function updateSession(request: NextRequest) {
 
   // Admin Protection: Double check that /admin is only for admins
   if (user && pathname.startsWith('/admin')) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single()
-      
-      if (profile?.role !== 'admin') {
-          // If not admin, kick back to student dashboard (or home)
-          return NextResponse.redirect(new URL('/student/dashboard', request.url))
-      }
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    if (profile?.role !== 'admin') {
+      // If not admin, kick back to student dashboard (or home)
+      return NextResponse.redirect(new URL('/student/dashboard', request.url))
+    }
   }
 
   // Auth routes (redirect if already logged in)
@@ -72,11 +72,11 @@ export async function updateSession(request: NextRequest) {
         .select('id, role')
         .eq('id', user.id)
         .single()
-      
+
       if (profile) {
         // ADMIN BYPASS
         if (profile.role === 'admin') {
-            return NextResponse.redirect(new URL('/admin/dashboard', request.url))
+          return NextResponse.redirect(new URL('/admin/dashboard', request.url))
         }
 
         // Check enrollment status
@@ -85,7 +85,7 @@ export async function updateSession(request: NextRequest) {
           .select('payment_status')
           .eq('user_id', user.id)
           .single()
-        
+
         if (enrollment?.payment_status === 'pending') {
           return NextResponse.redirect(new URL('/pago', request.url))
         }
@@ -98,12 +98,13 @@ export async function updateSession(request: NextRequest) {
 
   // If user is logged in, handle various redirects
   if (user) {
-    // Skip API routes, static assets, auth routes
+    // Skip API routes, static assets, auth routes, and public course detail pages
     if (
       pathname.startsWith('/api') ||
       pathname.startsWith('/auth') ||
       pathname.startsWith('/_next') ||
-      pathname === '/'
+      pathname === '/' ||
+      pathname.startsWith('/curso/')
     ) {
       return response
     }
@@ -125,7 +126,7 @@ export async function updateSession(request: NextRequest) {
       // ADMIN BYPASS: If admin, allow access to /admin/* and skip payment checks
       if (profile.role === 'admin') {
         if (pathname.startsWith('/admin')) {
-            return response
+          return response
         }
         // Admin can still see student pages, but skipping forced redirect for now
         // if they are just navigating around.
