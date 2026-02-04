@@ -82,19 +82,19 @@ const COURSES = [
 
 export function CourseGrid() {
   return (
-    <section id="cursos" className="py-20 bg-black/50">
+    <section id="cursos" className="py-12 md:py-20 bg-black/50">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Oferta Educativa</h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+        <div className="text-center mb-10 md:mb-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4">Oferta Educativa</h2>
+          <p className="text-sm md:text-base text-gray-400 max-w-2xl mx-auto px-4">
             Un programa modular diseñado para llevarte de cero a experto en las tecnologías más demandadas.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {COURSES.map((course) => (
             <Card key={course.id} className="bg-gray-900/50 border-white/10 overflow-hidden hover:border-cyan-500/50 transition-all group flex flex-col">
-              <div className="relative h-48 w-full overflow-hidden">
+              <div className="relative h-40 md:h-48 w-full overflow-hidden">
                 <Image
                   src={course.image}
                   alt={course.title}
@@ -103,7 +103,7 @@ export function CourseGrid() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                 <Badge 
-                  className={`absolute top-4 right-4 ${
+                  className={`absolute top-3 right-3 md:top-4 md:right-4 text-xs ${
                     course.status === 'Activo' 
                       ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/50' 
                       : 'bg-gray-500/20 text-gray-400 border-gray-500/50'
@@ -113,31 +113,31 @@ export function CourseGrid() {
                 </Badge>
               </div>
 
-              <CardHeader className="pb-3">
-                <h3 className="text-xl font-bold leading-tight group-hover:text-cyan-400 transition-colors">
+              <CardHeader className="pb-2 md:pb-3 px-4 pt-4">
+                <h3 className="text-base md:text-xl font-bold leading-tight group-hover:text-cyan-400 transition-colors">
                   {course.title}
                 </h3>
               </CardHeader>
 
-              <CardContent className="pb-4 flex-grow">
-                <p className="text-sm text-gray-400 mb-4 line-clamp-3">
+              <CardContent className="pb-3 md:pb-4 flex-grow px-4">
+                <p className="text-xs md:text-sm text-gray-400 mb-3 md:mb-4 line-clamp-3">
                   {course.description}
                 </p>
                 
-                <div className="flex flex-col gap-2 text-sm text-gray-500">
+                <div className="flex flex-col gap-1.5 md:gap-2 text-xs md:text-sm text-gray-500">
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-cyan-500" />
+                    <Calendar className="w-3 h-3 md:w-4 md:h-4 text-cyan-500 shrink-0" />
                     <span>Inicio: {course.date}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-purple-500" />
+                    <Clock className="w-3 h-3 md:w-4 md:h-4 text-purple-500 shrink-0" />
                     <span>4 Semanas • 24 Horas</span>
                   </div>
                 </div>
               </CardContent>
 
-              <CardFooter className="pt-0 mt-auto">
-                <Button className="w-full bg-white/5 hover:bg-white/10 text-white border border-white/10" asChild>
+              <CardFooter className="pt-0 mt-auto px-4 pb-4">
+                <Button className="w-full bg-white/5 hover:bg-white/10 text-white border border-white/10 h-9 md:h-10 text-sm" asChild>
                   <Link href={`/curso/${course.id}`}>
                     Ver Detalles
                   </Link>

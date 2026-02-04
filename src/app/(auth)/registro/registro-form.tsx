@@ -69,6 +69,11 @@ export function RegistroForm({
   groups,
   userName,
 }: RegistroFormProps) {
+  // Auto-select the first active course
+  const activeCourse = React.useMemo(() => {
+    return courses.find((c) => c.status === "active") || courses[0]
+  }, [courses])
+
   const [state, formAction, isPending] = useActionState<RegistroFormState, FormData>(
     async (_prevState, data) => {
       const formData = new FormData()
@@ -92,23 +97,25 @@ export function RegistroForm({
       occupation: "",
       aiUsage: "",
       courseExpectations: "",
-      courseId: "",
+      courseId: activeCourse?.id || "",
       groupId: "",
     },
   })
 
   const selectedCourseId = form.watch("courseId")
 
-  // Filter groups by selected course
+  // Filter groups by selected course (auto-selected)
   const availableGroups = React.useMemo(() => {
     if (!selectedCourseId) return []
     return groups.filter((g) => g.course_id === selectedCourseId)
   }, [selectedCourseId, groups])
 
-  // Reset group when course changes
+  // Auto-select course on mount
   React.useEffect(() => {
-    form.setValue("groupId", "")
-  }, [selectedCourseId, form])
+    if (activeCourse && !selectedCourseId) {
+      form.setValue("courseId", activeCourse.id)
+    }
+  }, [activeCourse, selectedCourseId, form])
 
   const onSubmit = (data: FormData) => {
     React.startTransition(() => {
@@ -182,58 +189,37 @@ export function RegistroForm({
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="courseId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Curso</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecciona un curso" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {courses.map((course) => (
-                    <SelectItem
-                      key={course.id}
-                      value={course.id}
-                      disabled={course.status !== "active"}
-                    >
-                      <span className={cn(course.status !== "active" && "text-muted-foreground")}>
-                        {course.number}. {course.name}
-                        {course.status !== "active" && " (Próximamente)"}
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* Auto-selected course info */}
+        {activeCourse && (
+          <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 p-4">
+            <div className="flex items-start gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cyan-500/20 text-cyan-400 font-bold text-sm">
+                {activeCourse.number}
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-sm text-white mb-1">Curso Seleccionado</h4>
+                <p className="text-sm text-gray-300">{activeCourse.name}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Hidden field to submit course ID */}
+        <input type="hidden" {...form.register("courseId")} value={activeCourse?.id || ""} />
 
         <FormField
           control={form.control}
           name="groupId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Grupo / Horario</FormLabel>
+              <FormLabel>Selecciona tu Horario</FormLabel>
               <Select
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                disabled={!selectedCourseId}
               >
                 <FormControl>
                   <SelectTrigger className="w-full">
-                    <SelectValue
-                      placeholder={
-                        selectedCourseId
-                          ? "Selecciona un horario"
-                          : "Primero selecciona un curso"
-                      }
-                    />
+                    <SelectValue placeholder="Selecciona un horario" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

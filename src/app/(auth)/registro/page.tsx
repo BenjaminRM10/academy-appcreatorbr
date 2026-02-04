@@ -100,7 +100,7 @@ export default async function RegistroPage() {
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/20 text-cyan-400 font-bold text-lg">
                 2
               </div>
-              <span className="text-lg text-zinc-200">Selecciona tu curso y horario</span>
+              <span className="text-lg text-zinc-200">Selecciona tu horario</span>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/20 text-cyan-400 font-bold text-lg">
@@ -117,10 +117,19 @@ export default async function RegistroPage() {
           </div>
         </div>
       </div>
-      <div className="lg:p-8">
-        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[450px]">
-          <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">
+      
+      {/* Mobile Welcome Banner */}
+      <div className="lg:hidden w-full bg-gradient-to-b from-zinc-900 to-cyan-950 text-white p-6 text-center">
+        <h2 className="text-2xl font-bold mb-2">¡Bienvenido! 🚀</h2>
+        <p className="text-sm text-zinc-300">
+          Estás a un paso de unirte a la <span className="text-cyan-400 font-semibold">Escuela de Ingeniería y Tecnología 4.0</span>
+        </p>
+      </div>
+
+      <div className="lg:p-8 p-4">
+        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[450px] py-8 lg:py-0">
+          <div className="flex flex-col space-y-2 text-center px-2">
+            <h1 className="text-xl md:text-2xl font-semibold tracking-tight">
               Completa tu Registro
             </h1>
             <p className="text-sm text-muted-foreground">
@@ -136,7 +145,7 @@ export default async function RegistroPage() {
             userEmail={userEmail}
           />
 
-          <p className="px-8 text-center text-xs text-muted-foreground">
+          <p className="px-4 md:px-8 text-center text-xs text-muted-foreground">
             Al registrarte, aceptas nuestros términos y condiciones.
             El acceso al curso se activará después de confirmar tu pago.
           </p>

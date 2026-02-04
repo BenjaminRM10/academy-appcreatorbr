@@ -7,6 +7,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Navbar } from '@/components/landing/Navbar';
 import { Footer } from '@/components/landing/Footer';
+import { WhatsAppButton } from '@/components/WhatsAppButton';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -38,60 +39,60 @@ export default async function PublicCourseDetailPage({ params }: PageProps) {
     <div className="min-h-screen bg-black text-white selection:bg-cyan-500/30">
       <Navbar />
       
-      <main className="container mx-auto px-4 py-24 md:py-32">
+      <main className="container mx-auto px-4 py-20 md:py-24 lg:py-32">
         {/* Back Link */}
-        <Link href="/#cursos" className="inline-flex items-center text-sm text-gray-400 hover:text-cyan-400 mb-8 transition-colors">
+        <Link href="/#cursos" className="inline-flex items-center text-sm text-gray-400 hover:text-cyan-400 mb-6 md:mb-8 transition-colors">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Volver a Cursos
         </Link>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
             {/* Left Column: Info & Syllabus */}
-            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
-                <div className="space-y-4">
-                    <div className="flex gap-2">
-                         <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 bg-cyan-500/10">
+            <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
+                <div className="space-y-3 md:space-y-4">
+                    <div className="flex gap-2 flex-wrap">
+                         <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 bg-cyan-500/10 text-xs">
                             Curso {syllabus.number}
                         </Badge>
-                        <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10">
+                        <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10 text-xs">
                             4 Semanas
                         </Badge>
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-bold leading-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
                         {syllabus.title}
                     </h1>
-                    <p className="text-xl text-gray-300 leading-relaxed">
+                    <p className="text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed">
                         {syllabus.description}
                     </p>
                 </div>
 
-                <div className="flex flex-wrap gap-4 text-sm text-gray-400">
+                <div className="flex flex-wrap gap-3 md:gap-4 text-xs md:text-sm text-gray-400">
                     <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
-                        <Calendar className="h-4 w-4 text-cyan-500" />
+                        <Calendar className="h-3 w-3 md:h-4 md:w-4 text-cyan-500" />
                         <span>Inicia: 16 Feb 2026</span>
                     </div>
                     <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
-                        <Clock className="h-4 w-4 text-purple-500" />
-                        <span>Lun, Mié, Vie (19:00 - 21:00)</span>
+                        <Clock className="h-3 w-3 md:h-4 md:w-4 text-purple-500" />
+                        <span className="text-xs md:text-sm">Lun, Mié, Vie (19:00 - 21:00)</span>
                     </div>
                 </div>
 
-                <div className="space-y-6 pt-8">
-                    <h2 className="text-2xl font-bold flex items-center gap-2">
-                        <span className="w-1 h-8 bg-cyan-500 rounded-full"></span>
+                <div className="space-y-4 md:space-y-6 pt-6 md:pt-8">
+                    <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
+                        <span className="w-1 h-6 md:h-8 bg-cyan-500 rounded-full"></span>
                         Plan de Estudios
                     </h2>
                     
-                    <div className="grid gap-4">
+                    <div className="grid gap-3 md:gap-4">
                         {syllabus.weeks.map((week, index) => (
-                            <div key={index} className="bg-white/5 border border-white/10 rounded-xl p-6 hover:border-cyan-500/30 transition-colors">
-                                <h3 className="text-lg font-semibold text-cyan-100 mb-3">
+                            <div key={index} className="bg-white/5 border border-white/10 rounded-xl p-4 md:p-6 hover:border-cyan-500/30 transition-colors">
+                                <h3 className="text-base md:text-lg font-semibold text-cyan-100 mb-2 md:mb-3">
                                     {week.title}
                                 </h3>
                                 <ul className="space-y-2">
                                     {week.topics.map((topic, i) => (
-                                        <li key={i} className="flex items-start gap-3 text-sm text-gray-400">
-                                            <CheckCircle2 className="h-4 w-4 shrink-0 text-cyan-500 mt-0.5" />
+                                        <li key={i} className="flex items-start gap-2 md:gap-3 text-xs md:text-sm text-gray-400">
+                                            <CheckCircle2 className="h-3 w-3 md:h-4 md:w-4 shrink-0 text-cyan-500 mt-0.5" />
                                             <span>{topic}</span>
                                         </li>
                                     ))}
@@ -103,8 +104,8 @@ export default async function PublicCourseDetailPage({ params }: PageProps) {
             </div>
 
             {/* Right Column: Sticky Card & Actions */}
-            <div className="lg:sticky lg:top-32 space-y-8 animate-in fade-in slide-in-from-right-8 duration-700 delay-200">
-                <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-cyan-900/20">
+            <div className="lg:sticky lg:top-32 space-y-6 md:space-y-8 animate-in fade-in slide-in-from-right-8 duration-700 delay-200">
+                <div className="relative aspect-video w-full overflow-hidden rounded-xl md:rounded-2xl border border-white/10 shadow-2xl shadow-cyan-900/20">
                     <Image
                         src={imagePath}
                         alt={syllabus.title}
@@ -115,27 +116,27 @@ export default async function PublicCourseDetailPage({ params }: PageProps) {
                 </div>
 
                 <Card className="bg-gray-900/80 border-cyan-500/30 backdrop-blur-sm">
-                    <CardHeader>
-                        <CardTitle className="text-2xl">Inscríbete Ahora</CardTitle>
+                    <CardHeader className="pb-4">
+                        <CardTitle className="text-xl md:text-2xl">Inscríbete Ahora</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-6">
+                    <CardContent className="space-y-4 md:space-y-6">
                         <div className="space-y-2">
                             <div className="flex items-end gap-2">
-                                <span className="text-4xl font-bold text-white">$800</span>
-                                <span className="text-xl text-gray-400 mb-1">MXN / mes</span>
+                                <span className="text-3xl md:text-4xl font-bold text-white">$800</span>
+                                <span className="text-lg md:text-xl text-gray-400 mb-1">MXN / mes</span>
                             </div>
-                            <p className="text-sm text-gray-400">Acceso completo a clases en vivo, grabaciones y comunidad.</p>
+                            <p className="text-xs md:text-sm text-gray-400">Acceso completo a clases en vivo, grabaciones y comunidad.</p>
                         </div>
 
                         <div className="space-y-3">
                              {syllabus.number === 1 ? (
-                                <Button size="lg" className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold shadow-lg shadow-cyan-500/25" asChild>
+                                <Button size="lg" className="w-full h-11 md:h-12 text-sm md:text-base bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold shadow-lg shadow-cyan-500/25" asChild>
                                     <Link href="/registro">
-                                        Registrarme al Curso <ArrowRight className="ml-2 h-4 w-4" />
+                                        Registrarme al Curso <ArrowRight className="ml-2 h-3 w-3 md:h-4 md:w-4" />
                                     </Link>
                                 </Button>
                              ) : (
-                                <Button size="lg" disabled className="w-full bg-gray-700 text-gray-400 cursor-not-allowed border border-gray-600">
+                                <Button size="lg" disabled className="w-full h-11 md:h-12 text-sm md:text-base bg-gray-700 text-gray-400 cursor-not-allowed border border-gray-600">
                                     Inscripciones Cerradas <span className="ml-2 text-xs opacity-70">(Próximamente)</span>
                                 </Button>
                              )}
@@ -144,14 +145,14 @@ export default async function PublicCourseDetailPage({ params }: PageProps) {
                             </p>
                         </div>
 
-                        <div className="pt-4 border-t border-white/10 space-y-4">
+                        <div className="pt-3 md:pt-4 border-t border-white/10 space-y-3 md:space-y-4">
                             <div>
-                                <h4 className="font-semibold text-white mb-1">¿Para quién es?</h4>
-                                <p className="text-sm text-gray-400">{syllabus.targetAudience}</p>
+                                <h4 className="font-semibold text-white mb-1 text-sm md:text-base">¿Para quién es?</h4>
+                                <p className="text-xs md:text-sm text-gray-400">{syllabus.targetAudience}</p>
                             </div>
                             <div>
-                                <h4 className="font-semibold text-white mb-1">Meta del Curso</h4>
-                                <p className="text-sm text-gray-400">{syllabus.goal}</p>
+                                <h4 className="font-semibold text-white mb-1 text-sm md:text-base">Meta del Curso</h4>
+                                <p className="text-xs md:text-sm text-gray-400">{syllabus.goal}</p>
                             </div>
                         </div>
                     </CardContent>
@@ -161,6 +162,7 @@ export default async function PublicCourseDetailPage({ params }: PageProps) {
       </main>
 
       <Footer />
+      <WhatsAppButton />
     </div>
   );
 }
