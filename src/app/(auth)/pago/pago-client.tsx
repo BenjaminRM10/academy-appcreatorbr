@@ -16,14 +16,15 @@ interface PagoClientProps {
 
 export function PagoClient({ courseName, courseNumber, userName }: PagoClientProps) {
   const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'spei'>('stripe')
-  const [isLoading, setIsLoading] = useState(false)
+  const [isStripeLoading, setIsStripeLoading] = useState(false)
+  const [isSpeiLoading, setIsSpeiLoading] = useState(false)
   const [isSpeiSubmitted, setIsSpeiSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
   const supabase = createClient()
 
   const handleStripePayment = async () => {
-    setIsLoading(true)
+    setIsStripeLoading(true)
     setError(null)
 
     try {
@@ -40,12 +41,12 @@ export function PagoClient({ courseName, courseNumber, userName }: PagoClientPro
     } catch (err) {
       console.error('Payment error:', err)
       setError(err instanceof Error ? err.message : 'Error al procesar el pago')
-      setIsLoading(false)
+      setIsStripeLoading(false)
     }
   }
 
   const handleSpeiSubmit = async () => {
-    setIsLoading(true)
+    setIsSpeiLoading(true)
     setError(null)
     try {
       const response = await fetch('/api/payments/manual-submit', { method: 'POST' })
@@ -54,7 +55,7 @@ export function PagoClient({ courseName, courseNumber, userName }: PagoClientPro
     } catch (err) {
       setError('No se pudo confirmar. Intenta de nuevo.')
     } finally {
-      setIsLoading(false)
+      setIsSpeiLoading(false)
     }
   }
 
@@ -104,6 +105,7 @@ export function PagoClient({ courseName, courseNumber, userName }: PagoClientPro
         {/* Method Selection */}
         <div className="grid grid-cols-2 gap-2 mb-6 p-1 bg-muted/20 rounded-lg">
           <button
+            type="button"
             onClick={() => setPaymentMethod('stripe')}
             className={`flex items-center justify-center gap-2 p-3 rounded-md transition-all ${paymentMethod === 'stripe'
               ? 'bg-background shadow text-foreground'
@@ -114,6 +116,7 @@ export function PagoClient({ courseName, courseNumber, userName }: PagoClientPro
             <span className="font-medium">Tarjeta</span>
           </button>
           <button
+            type="button"
             onClick={() => setPaymentMethod('spei')}
             className={`flex items-center justify-center gap-2 p-3 rounded-md transition-all ${paymentMethod === 'spei'
               ? 'bg-background shadow text-foreground'
@@ -198,10 +201,10 @@ export function PagoClient({ courseName, courseNumber, userName }: PagoClientPro
             {paymentMethod === 'stripe' ? (
               <Button
                 onClick={handleStripePayment}
-                disabled={isLoading}
+                disabled={isStripeLoading}
                 className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 transition-all duration-300"
               >
-                {isLoading ? (
+                {isStripeLoading ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                     Procesando...
@@ -216,10 +219,10 @@ export function PagoClient({ courseName, courseNumber, userName }: PagoClientPro
             ) : (
               <Button
                 onClick={handleSpeiSubmit}
-                disabled={isLoading}
+                disabled={isSpeiLoading}
                 className="w-full h-12 text-lg font-semibold bg-white text-black hover:bg-gray-100 transition-all duration-300"
               >
-                {isLoading ? (
+                {isSpeiLoading ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                     Enviando...
