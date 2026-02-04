@@ -4,10 +4,22 @@ import Link from "next/link";
 export function Hero() {
   return (
     <section className="relative pt-24 pb-16 md:pt-48 md:pb-32 overflow-hidden">
-      {/* Background Glows */}
+      {/* Background Glows - Optimized for Safari (Radial Gradients instead of CSS Blur) */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl -z-10 opacity-30 pointer-events-none">
-        <div className="absolute top-20 left-1/4 w-96 h-96 bg-cyan-500 rounded-full blur-[128px]" />
-        <div className="absolute top-40 right-1/4 w-96 h-96 bg-purple-600 rounded-full blur-[128px]" />
+        <div 
+          className="absolute top-20 left-1/4 w-[40rem] h-[40rem] -translate-x-1/2 rounded-full mix-blend-screen will-change-transform"
+          style={{
+            background: 'radial-gradient(circle, rgba(6,182,212,0.6) 0%, rgba(6,182,212,0) 70%)',
+            transform: 'translateZ(0)'
+          }} 
+        />
+        <div 
+          className="absolute top-40 right-1/4 w-[40rem] h-[40rem] translate-x-1/2 rounded-full mix-blend-screen will-change-transform"
+          style={{
+            background: 'radial-gradient(circle, rgba(147,51,234,0.6) 0%, rgba(147,51,234,0) 70%)',
+            transform: 'translateZ(0)'
+          }}
+        />
       </div>
 
       <div className="container mx-auto px-4 text-center">
